@@ -20,30 +20,38 @@ def get_active_annex_source() -> dict | None:
 
 
 def search_labels(query: str, limit: int = 50) -> list[dict]:
-    """Trigram-similarity search on labels — returns rows ordered by similarity.
+    """Trigram-similarity search on labels for actual product entries.
 
-    Uses the similarity() function with a threshold (0.1) instead of the `%`
-    operator, because escaping `%` correctly in SQLAlchemy text() with named
-    parameters is unreliable across drivers. similarity() avoids all that.
+    Filters out internal "navigation" nodes (ROOT, category headers like "0",
+    subgroup headers like "0A", "5C") and returns only real ECN entries
+    (codes matching `^[0-9][A-E]\\d{3}`, optionally with sub-paths).
 
-    The pg_trgm GIN index is bypassed for this style of query, but at 2.6k
-    rows that's still sub-millisecond.
+    Each row includes the parent's label so the UI can render breadcrumb
+    context like "Category 5 — Telecommunications › 5C001 Resistors...".
     """
     source = get_active_annex_source()
     if not source:
         return []
     return run_query(
         """
-        SELECT  code,
-                label,
-                category,
-                subgroup,
-                depth,
-                similarity(label, :q) AS score
-        FROM    annex_i_items
-        WHERE   source_id = :sid
-          AND   similarity(label, :q) > 0.05
-        ORDER BY similarity(label, :q) DESC, depth ASC
+        SELECT  a.id           AS id,
+                a.parent_id    AS parent_id,
+                a.code         AS code,
+                a.label        AS label,
+                a.category     AS category,
+                a.subgroup     AS subgroup,
+                a.depth        AS depth,
+                p.label        AS parent_label,
+                p.code         AS parent_code,
+                similarity(a.label, :q) AS score
+        FROM    annex_i_items a
+        LEFT JOIN annex_i_items p
+               ON p.id = a.parent_id
+              AND p.source_id = a.source_id
+        WHERE   a.source_id = :sid
+          AND   a.code ~ '^[0-9][A-E][0-9]{3}'   -- real entries only
+          AND   similarity(a.label, :q) > 0.05
+        ORDER BY similarity(a.label, :q) DESC, a.depth ASC, a.code ASC
         LIMIT   :limit
         """,
         {"q": query, "sid": source["id"], "limit": limit},

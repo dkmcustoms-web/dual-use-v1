@@ -36,11 +36,12 @@ def _category_label(category: str | None) -> str:
 
 def _render_hit_card(hit: dict, query: str | None = None) -> None:
     """Render one search hit as a self-contained card."""
-    code = hit["code"]
+    code = hit.get("code") or "?"
     label = hit.get("label") or ""
     score = float(hit.get("score") or 0)
     parent_label = hit.get("parent_label") or ""
     parent_code = hit.get("parent_code") or ""
+    hit_id = hit.get("id")  # may be missing on certain edge cases
 
     # Severity badge based on similarity score
     if score >= 0.30:
@@ -56,7 +57,7 @@ def _render_hit_card(hit: dict, query: str | None = None) -> None:
         with c1:
             st.markdown(f"### `{code}`")
             cat_label = _category_label(hit.get("category"))
-            breadcrumb_parts = [cat_label]
+            breadcrumb_parts = [cat_label] if cat_label else []
             if parent_code and parent_code != code:
                 breadcrumb_parts.append(f"`{parent_code}` {parent_label[:60]}")
             breadcrumb = "  ›  ".join(p for p in breadcrumb_parts if p)
@@ -69,12 +70,18 @@ def _render_hit_card(hit: dict, query: str | None = None) -> None:
         # Full label (no truncation)
         st.markdown(label)
 
-        # Show sub-entries if any
-        children = annex_i.get_children(hit["id"])
-        if children:
-            with st.expander(f"📂 {len(children)} sub-entries"):
-                for c in children:
-                    st.markdown(f"- **`{c['code']}`** — {c['label']}")
+        # Show sub-entries if any — defensively skip when id missing
+        if hit_id is not None:
+            try:
+                children = annex_i.get_children(hit_id)
+                if children:
+                    with st.expander(f"📂 {len(children)} sub-entries"):
+                        for c in children:
+                            st.markdown(
+                                f"- **`{c.get('code', '?')}`** — {c.get('label', '')}"
+                            )
+            except Exception as exc:
+                st.caption(f"_(sub-entries unavailable: {exc})_")
 
 
 def _render_manual_hit(row: dict) -> None:

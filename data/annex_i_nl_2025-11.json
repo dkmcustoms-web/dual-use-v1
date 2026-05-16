@@ -1,0 +1,2861 @@
+{
+  "metadata": {
+    "source": "Consolidated EU Regulation 2021/821 — Annex I",
+    "language": "NL",
+    "version": "2025-11",
+    "consolidation_date": "2025-11-15",
+    "entry_count": 407,
+    "note": "Parsed from EUR-Lex consolidated Dutch text 02021R0821-NL-15.11.2025."
+  },
+  "entries": [
+    {
+      "code": "0A001",
+      "label": "“Kernreactoren” en speciaal ontworpen en gebouwde uitrusting en onderdelen ervan, als hieronder:",
+      "category": "0",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "0B001",
+      "label": "Fabrieken voor de scheiding van isotopen van “natuurlijk uranium”, “verarmd uranium”, of “speciale splijtstoffen” en speciaal daarvoor ontworpen of vervaardigde uitrusting en onderdelen, als hieronder:",
+      "category": "0",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "0B002",
+      "label": "Speciaal voor isotoopscheidingsinstallaties als bedoeld in 0B001 ontworpen of vervaardigde hulpsystemen voor uitrusting en onderdelen vervaardigd van of beschermd door “materiaal dat bestand is tegen corrosie door UF6”, als hieronder:",
+      "category": "0",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "0B003",
+      "label": "Fabrieken voor de omzetting van uranium en speciaal daarvoor ontworpen of vervaardigde uitrusting, als hieronder:",
+      "category": "0",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "0B004",
+      "label": "Fabriek voor de productie of concentratie van zwaar water, deuterium en deuteriumverbindingen en speciaal ontworpen en gebouwde uitrusting en onderdelen ervan, als hieronder:",
+      "category": "0",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "0B005",
+      "label": "Fabrieken, speciaal ontworpen voor de vervaardiging van splijtstofelementen voor “kernreactoren” en speciaal ontworpen of vervaardigde uitrusting daarvoor.",
+      "category": "0",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "0B006",
+      "label": "Fabrieken voor het opwerken van bestraalde splijtstofelementen van “kernreactoren” en speciaal daarvoor ontworpen of vervaardigde uitrusting en onderdelen.",
+      "category": "0",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "0B007",
+      "label": "Fabrieken voor de omzetting van plutonium en speciaal daarvoor ontworpen of vervaardigde uitrusting, als hieronder:",
+      "category": "0",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "0C001",
+      "label": "“Natuurlijk uranium” of “verarmd uranium” of thorium in de vorm van metaal, legering, chemische verbinding of concentraat en elk materiaal dat het voorgaande bevat;",
+      "category": "0",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "0C002",
+      "label": "“Speciale splijtstoffen”",
+      "category": "0",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "0C003",
+      "label": "Deuterium, zwaar water (deuteriumoxide) en andere deuteriumverbindingen, en mengsels en oplossingen die deuterium bevatten, waarin de isotoopverhouding van deuterium tot waterstof groter is dan 1:5 000 .",
+      "category": "0",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "0C004",
+      "label": "Grafiet met een zuiverheid beter dan 5 ppm ‘boorequivalent’ en met een dichtheid groter dan 1,50 g/cm3 voor gebruik in een “kernreactor”, in hoeveelheden groter dan 1 kg.",
+      "category": "0",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "0C005",
+      "label": "Speciaal vervaardigde verbindingen of poeders voor de fabricage van membranen voor gasdiffusie die bestand zijn tegen corrosie door UF6 (bv. nikkel of legeringen met 60 gewichtsprocent of meer aan nikkel, aluminiumoxide en volledig gefluoreerde koolwaterstofpolymeren), met een zuiverheidsgraad van 99,9 gewichtsprocent of meer, met een gemiddelde korrelgrootte van minder dan 10 μm, gemeten volgens Standard B330 van de ASTM en met een zeer uniforme deeltjesgrootte.",
+      "category": "0",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "0D001",
+      "label": "“Programmatuur”, speciaal ontworpen of aangepast voor de “ontwikkeling”, de “productie” of het “gebruik” van goederen, bedoeld in deze categorie.",
+      "category": "0",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "0E001",
+      "label": "“Technologie” overeenkomstig de nucleaire technologienoot voor de “ontwikkeling”, de “productie” of het “gebruik” van goederen, bedoeld in deze categorie.",
+      "category": "0",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "1A001",
+      "label": "Onderdelen vervaardigd van gefluoreerde verbindingen, als hieronder:",
+      "category": "1",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "1A002",
+      "label": "“Composieten” of laminaten, als volgt:",
+      "category": "1",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "1A003",
+      "label": "Producten vervaardigd van on “smeltbare” aromatische polyimiden in de vorm van film, vellen, band of lint, met een of meer van de onderstaande eigenschappen:",
+      "category": "1",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "1A004",
+      "label": "Beschermings- en detectieapparatuur en onderdelen daarvan die niet onder de lijst militaire goederen vallen, als hieronder:",
+      "category": "1",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "1A005",
+      "label": "Kogelvrije kleding en onderdelen daarvoor, als hieronder:",
+      "category": "1",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "1A006",
+      "label": "Apparatuur als hieronder, die speciaal is ontworpen of aangepast voor het demonteren van geïmproviseerde explosiemiddelen (Improvised Explosive Devices, IED’s), als hieronder, en speciaal daarvoor ontworpen onderdelen en toebehoren:",
+      "category": "1",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "1A007",
+      "label": "Apparatuur en toestellen als hieronder, die speciaal zijn ontworpen om explosieve ladingen en middelen die “energetische materialen” bevatten, op elektrische wijze tot ontploffing te brengen:",
+      "category": "1",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "1A008",
+      "label": "Explosieve ladingen, middelen en componenten, waaronder:",
+      "category": "1",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "1A102",
+      "label": "Opnieuw verzadigde, door pyrolyse verkregen koolstof-koolstofcomponenten bestemd voor ruimtelanceervoertuigen, bedoeld in 9A004, of sonderingsraketten, bedoeld in 9A104.",
+      "category": "1",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "1A202",
+      "label": "Composieten, met uitzondering van die bedoeld in 1A002, in de vorm van dunwandige buizen en met alle volgende eigenschappen:",
+      "category": "1",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "1A225",
+      "label": "Vochtbestendige geplatineerde katalysatoren, speciaal ontworpen of vervaardigd voor het bevorderen van de waterstofisotoopuitwisseling tussen waterstof en water voor het terugwinnen van tritium uit water of voor de productie of veredeling van zwaar water.",
+      "category": "1",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "1A226",
+      "label": "Specifieke pakkingen die kunnen worden gebruikt voor de scheiding van zwaar water van gewoon water, met beide volgende eigenschappen:",
+      "category": "1",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "1A227",
+      "label": "Hoge densiteit stralingafschermende ramen (van loodglas of ander materiaal) met alle hiernavolgende eigenschappen en speciaal ontworpen kozijnen daarvoor:",
+      "category": "1",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "1B001",
+      "label": "Apparatuur ontworpen voor de “productie” van “composieten” of laminaten of “stapel- of continuvezelmateriaal”, als hieronder, en speciaal ontworpen onderdelen en toebehoren daarvoor:",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B002",
+      "label": "Apparatuur ontworpen voor het vervaardigen van metaallegeringspoeder of uit deeltjes bestaand materiaal, met alle volgende eigenschappen:",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B003",
+      "label": "Gereedschap, matrijzen, stempels of klemmen voor het “superplastisch vormen” of “diffusielassen” van titaan of aluminium of legeringen daarvan, speciaal ontworpen voor het vervaardigen van één of meer:",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B101",
+      "label": "Apparatuur, met uitzondering van de onder 1B001 bedoelde apparatuur voor de “productie” van composieten, als hieronder, en speciaal ontworpen onderdelen en toebehoren daarvoor:",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B102",
+      "label": "Andere metaalpoeder-“productieapparatuur” dan die bedoeld in 1B002 en onderdelen, als hieronder:",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B115",
+      "label": "Andere apparatuur dan die bedoeld in 1B002 en 1B102, voor de productie van stuwstoffen en bestanddelen daarvan, als hieronder, en speciaal daarvoor ontworpen onderdelen:",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B116",
+      "label": "Speciaal ontworpen spuitmonden (sproeikoppen) voor de “productie” van pyrolytisch gevormde materialen op een as, mal of ander substraat van voorlopergassen die ontleden bij temperaturen van 1 573  K (1 300  °C) tot 3 173  K (2 900  °C) en een druk van 130 Pa tot 20 kPa.",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B117",
+      "label": "Niet-continumengers met alle hiernavolgende eigenschappen, alsmede speciaal daarvoor ontworpen onderdelen:",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B118",
+      "label": "Continumengers met alle hiernavolgende eigenschappen, alsmede speciaal daarvoor ontworpen onderdelen:",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B119",
+      "label": "Luchtstraalmolens die gebruikt kunnen worden om de stoffen, genoemd in 1C011.a., 1C011.b., 1C111 of in de lijst militaire goederen, te malen of te stampen, en speciaal ontworpen onderdelen daarvoor.",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B201",
+      "label": "Continuvezelwindmachines, uitgezonderd machines als bedoeld in 1B001 of 1B101, en bijbehorende apparatuur, als hieronder:",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B225",
+      "label": "Elektrolytische cellen voor de productie van fluor met een capaciteit van meer dan 250 g fluor per uur.",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B226",
+      "label": "Elektromagnetische isotopenscheiders, ontworpen voor of uitgerust met enkelvoudige of meervoudige ionenbronnen die een totale ionenbundelstroom van 50 mA of meer kunnen leveren.",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B228",
+      "label": "Kolommen voor de cryogene distillatie van waterstof met alle volgende eigenschappen:",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B230",
+      "label": "Pompen, geschikt voor de circulatie van geconcentreerde of verdunde oplossingen van de katalysator kaliumamide in vloeibare ammoniak (KNH2/NH3), met alle volgende eigenschappen:",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B231",
+      "label": "Tritiuminstallaties of -fabrieken, en apparatuur daarvoor, als hieronder:",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B232",
+      "label": "Turbo expanders of turbo-expansie/compressiesets met beide volgende eigenschappen:",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B233",
+      "label": "Installaties of fabrieken voor het scheiden van lithiumisotopen en systemen en apparatuur daarvoor, als hieronder:",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B234",
+      "label": "Brisante insluitingsvaten, -kamers of -containers en andere soortgelijke insluitingsinrichtingen die zijn ontworpen voor het testen van brisante springstoffen of explosiemiddelen, met beide volgende eigenschappen:",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1B235",
+      "label": "Doelelementen en -onderdelen voor de productie van tritium, als volgt:",
+      "category": "1",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "1C001",
+      "label": "Materialen, speciaal ontworpen voor het absorberen van elektromagnetische straling, of intrinsiek geleidende polymeren, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C002",
+      "label": "Metaallegeringen, metaallegeringspoeder of gelegeerde materialen, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C003",
+      "label": "Magnetische metalen van alle soorten, ongeacht de vorm, met één of meer van de volgende eigenschappen:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C004",
+      "label": "Uranium-titaanlegeringen of wolfraamlegeringen met een “matrix” op basis van ijzer, nikkel of koper, met alle volgende eigenschappen:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C005",
+      "label": "“Supergeleidende”“composiet”-geleiders in lengten groter dan 100 m of met een massa groter dan 100 g, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C006",
+      "label": "Vloeistoffen en smeermiddelen, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C007",
+      "label": "Keramische poeders, “composieten” met een keramische “matrix”, en ‘voorlopermaterialen’, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C008",
+      "label": "Niet-gefluoreerde polymeren, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C009",
+      "label": "Onbewerkte fluorverbindingen, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C010",
+      "label": "“Stapel- of continuvezelmateriaal”, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C011",
+      "label": "Metalen en verbindingen, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C012",
+      "label": "Materialen, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C101",
+      "label": "Materialen voor het beperken van de zichtbaarheid zoals de radarreflectie, het ultraviolet/infrarood of akoestische beeld, anders dan de materialen bedoeld in 1C001, geschikt voor gebruik in ‘raketten’, subsystemen van “raketten” of onbemande luchtvaartuigen, bedoeld in 9A012 of 9A112.a.",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C102",
+      "label": "Opnieuw verzadigde, door pyrolyse verkregen koolstof-koolstof-materialen bestemd voor ruimtelanceervoertuigen, bedoeld in 9A004, of sonderingsraketten, bedoeld in 9A104.",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C107",
+      "label": "Niet in 1C007 beschreven grafiet en keramische materialen, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C111",
+      "label": "Niet in 1C011 beschreven stuwstoffen en chemicaliën voor de vervaardiging van stuwstoffen, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C116",
+      "label": "Maragingstaal, bruikbaar in ‘raketten’, met alle volgende eigenschappen:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C117",
+      "label": "Materiaal voor de productie van onderdelen van ‘raketten’, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C118",
+      "label": "Duplex roestvast staal met titaanstabilisatie (Ti-DSS), met de volgende eigenschappen:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C202",
+      "label": "Legeringen, anders dan bedoeld in 1C002.b.3. of 1C002.b.4., als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C210",
+      "label": "‘Stapel- of continuvezelmateriaal’ of ‹prepregs›, anders dan bedoeld in 1C010.a., 1C010.b. of 1C010.e., als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C216",
+      "label": "Maragingstaal, anders dan bedoeld in 1C116, ‘geschikt voor’ een treksterkte van 1 950  MPa of meer bij 293 K (20 °C).",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C225",
+      "label": "Boor, verrijkt in de boor-10-isotoop (10B) tot meer dan de natuurlijke abundantie, in de hiernavolgende vormen: elementair boor, boorverbindingen, boorhoudende mengsels, fabricaten daarvan, afval en schroot van deze stoffen.",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C226",
+      "label": "Wolfraam, wolfraamcarbide en legeringen die meer dan 90 gewichtsprocent wolfraam bevatten, anders dan bedoeld in 1C117, met beide volgende eigenschappen:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C227",
+      "label": "Calcium met beide volgende eigenschappen:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C228",
+      "label": "Magnesium met beide volgende eigenschappen:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C229",
+      "label": "Bismut met beide volgende eigenschappen:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C230",
+      "label": "Beryllium, als hierna: metaal, legeringen die meer dan 50 gewichtsprocent beryllium bevatten, berylliumverbindingen, fabricaten daarvan en afval of schroot van deze stoffen, anders dan vermeld in de lijst militaire goederen.",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C231",
+      "label": "Hafnium, als hierna: metaal, legeringen die meer dan 60 gewichtsprocent hafnium bevatten, verbindingen van hafnium die meer dan 60 gewichtsprocent hafnium bevat, fabricaten daarvan en afval of schroot van deze stoffen.",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C232",
+      "label": "Helium-3 (3He), mengsels die helium-3 bevatten, en producten of toestellen die een van deze stoffen bevatten.",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C233",
+      "label": "Lithium, verrijkt in de lithium-6-isotoop (6Li)tot meer dan de natuurlijke abundantie, of producten of toestellen die verrijkt lithium bevatten, als hierna: elementair lithium, legeringen, lithiumverbindingen, mengsels die lithium bevatten, fabricaten daarvan en afval of schroot van deze stoffen.",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C234",
+      "label": "Zirkonium met een hafniumgehalte van minder dan 1 gewichtsdeel hafnium op 500 gewichtsdelen zirkonium, als hierna: metaal, legeringen die meer dan 50 gewichtsprocent zirkonium bevatten, verbindingen, fabricaten daarvan, afval of schroot van deze stoffen, anders dan die vermeld zijn in 0A001.f.",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C235",
+      "label": "Tritium, tritiumverbindingen en mengsels welke tritium bevatten, waarin de verhouding van het aantal tritiumatomen tot het aantal waterstofatomen groter is dan 1:1 000 , en producten of toestellen die een van voorgaande stoffen bevatten.",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C236",
+      "label": "‘Radionucliden’ geschikt voor het maken van neutronenbronnen op basis van alfa-n-reactie, anders dan die bedoeld in 0C001 en 1C012.a., in de volgende vormen:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C237",
+      "label": "Radium-226 (-226Ra), radium-226-legeringen, radium-226-verbindingen, mengsels die radium-226 bevatten, fabricaten daarvan, en producten of toestellen die een van deze stoffen bevatten.",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C238",
+      "label": "Chloortrifluoride (ClF3).",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C239",
+      "label": "Brisante springstoffen, anders dan bedoeld in de lijst militaire goederen, of stoffen of mengsels met een gehalte van meer dan 2 gewichtsprocent aan deze springstoffen, met een kristaldichtheid groter dan 1,8 g/cm3 en een detonatiesnelheid groter dan 8 000  m/s.",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C240",
+      "label": "Nikkelpoeder en poreus nikkelmetaal, anders dan bedoeld in 0C005, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C240.b",
+      "label": "heeft betrekking op poreus metaal dat gevormd is door samenpersing en sintering van de materialen in 1C240.a., om een materiaal van metaal te vormen met fijne poriën die door de gehele structuur heen onderling verbonden zijn.",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 1
+    },
+    {
+      "code": "1C241",
+      "label": "Renium en legeringen die 90 gewichtsprocent of meer renium bevatten; en legeringen van renium en wolfraam die voor 90 gewichtsprocent of meer bestaan uit een combinatie van renium en wolfraam, anders dan bedoeld in 1C226, met beide onderstaande eigenschappen:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C350",
+      "label": "Chemische stoffen, geschikt voor het vervaardigen van toxische stoffen, als hieronder, en “chemische mengsels” die een of meer van deze stoffen bevatten:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C351",
+      "label": "Pathogenen voor mensen en dieren en “toxinen”, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C353",
+      "label": "‘Genetische elementen’ en ‘genetisch gemodificeerde organismen’, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C354",
+      "label": "Plantpathogenen, als hieronder:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C450",
+      "label": "Giftige chemische stoffen en voorlopers van giftige chemische stoffen, als hieronder, en “chemische mengsels” die een of meer van deze stoffen bevatten:",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1C513",
+      "label": "Poeders van ‘legeringen met hoge entropie’ of van “vuurvaste metalen en legeringen”, niet bedoeld in 1C002, met een oppervlak dat is gemodificeerd met ‘inoculanten’.",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "1D001",
+      "label": "“Programmatuur”, speciaal ontworpen of aangepast voor de “ontwikkeling”, de “productie” of het “gebruik” van goederen, bedoeld in 1B001, 1B002 en 1B003.",
+      "category": "1",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "1D002",
+      "label": "“Programmatuur” voor de “ontwikkeling” van laminaten of “composieten” met een organische “matrix”, een metaal“matrix” of een koolstof “matrix”.",
+      "category": "1",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "1D003",
+      "label": "“Programmatuur”, speciaal ontworpen of aangepast om apparatuur de mogelijkheid te bieden de functies uit te oefenen van apparatuur bedoeld in 1A004.c. of 1A004.d.",
+      "category": "1",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "1D101",
+      "label": "“Programmatuur”, speciaal ontworpen of aangepast voor de werking of het onderhoud van in 1B101, 1B102, 1B115, 1B117, 1B118 of 1B119 bedoelde goederen.",
+      "category": "1",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "1D103",
+      "label": "“Programmatuur”, speciaal ontwikkeld voor de analyse van de beperking van de zichtbaarheid zoals de radarreflectie, het ultraviolet/infrarood of akoestisch beeld.",
+      "category": "1",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "1D201",
+      "label": "“Programmatuur”, speciaal ontwikkeld voor het “gebruik” van de in 1B201 bedoelde goederen.",
+      "category": "1",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "1E001",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor de “ontwikkeling” of “productie” van apparatuur of materialen bedoeld in 1A002 tot en met 1A005, 1A006.b., 1A007, 1B en 1C.",
+      "category": "1",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "1E002",
+      "label": "Andere “technologie”, als hieronder:",
+      "category": "1",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "1E101",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor het “gebruik” van goederen, bedoeld in 1A102, 1B001, 1B101, 1B102, 1B115 tot en met 1B119, 1C001, 1C101, 1C107, 1C 111 tot en met 1C118, 1D101 of 1D103.",
+      "category": "1",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "1E102",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot betreffende de “ontwikkeling” van “programmatuur” bedoeld in 1D001, 1D101 of 1D103.",
+      "category": "1",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "1E103",
+      "label": "“Technologie” voor het regelen van de temperatuur, druk of atmosfeer in autoclaven of hydroclaven indien gebruikt voor de “productie” van composieten of halffabricaten van composieten.",
+      "category": "1",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "1E104",
+      "label": "“Technologie” voor de “productie” van pyrolytisch gevormde materialen op een mal, doorn of ander substraat van gassen die ontleden bij temperaturen van 1 573  K (1 300  °C) tot 3 173  K (2 900  °C) en drukken van 130 Pa tot 20 kPa.",
+      "category": "1",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "1E201",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor het “gebruik” van goederen, bedoeld in 1A002, 1A007, 1A202, 1A225 tot en met 1A227, 1B201, 1B225 tot en met 1B235, 1C002.b.3 of .b.4., 1C010.b., 1C202, 1C210, 1C216, 1C225 tot en met 1C241 of 1D201.",
+      "category": "1",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "1E202",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot betreffende de “ontwikkeling” of de “productie” van goederen, bedoeld in 1A007, 1A202, 1A225 tot en met 1A227.",
+      "category": "1",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "1E203",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor de “ontwikkeling” van “programmatuur”, bedoeld in 1D201.",
+      "category": "1",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "2A001",
+      "label": "Wrijvingsloze rollagers, rollagersystemen en onderdelen daarvan, als hieronder:",
+      "category": "2",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "2A101",
+      "label": "Andere dan onder 2A001 vermelde radiale kogellagers, met alle toleranties volgens ISO 492 tolerantieklasse 2 (of ANSI/ABMA STD 20 tolerantieklasse ABEC-9 of andere nationale equivalenten), of beter en met alle hierna volgende eigenschappen:",
+      "category": "2",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "2A225",
+      "label": "Kroezen vervaardigd van metalen die bestand zijn tegen vloeibare actiniden, als hieronder:",
+      "category": "2",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "2A226",
+      "label": "Afsluiters met alle volgende eigenschappen:",
+      "category": "2",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "2B001",
+      "label": "Werktuigmachines en combinaties daarvan, voor het verspanen (of snijden) van metalen, keramische materialen of “composieten”, die volgens de technische specificaties van de fabrikant kunnen worden uitgerust met elektronische toestellen voor “numerieke besturing”, als hieronder:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B002",
+      "label": "Numeriek bestuurde werktuigmachines voor optische afwerking, die zijn uitgerust voor selectieve materiaalverwijdering met het oog op de productie van niet-sferische optische oppervlakken, met alle volgende eigenschappen:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B003",
+      "label": "“Numeriek bestuurde” werktuigmachines, speciaal ontworpen voor het snijden, afwerken, slijpen of wetten van geharde (Rc = 40 of meer) rechte, schroef- en dubbelgeschroefde tandwielen met alle hieronder vermelde eigenschappen:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B004",
+      "label": "Hete “isostatische persen”, met alle hieronder vermelde eigenschappen, en speciaal ontworpen onderdelen en toebehoren daarvoor:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B005",
+      "label": "Speciaal ontworpen apparatuur voor de afzetting, verwerking en procesbesturing van anorganische deklagen, bekledingen en oppervlakmodificaties, als hieronder, voor in kolom 2 gespecificeerde substraten, door middel van procedés als omschreven in kolom 1 in de tabel na 2E003.f. en speciaal daarvoor ontworpen geautomatiseerde onderdelen voor de hantering, positionering, manipulatie en besturing:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B006",
+      "label": "Systemen, apparatuur, plaatsbepalers en “elektronische samenstellingen” voor dimensionale inspectie en meting, als hieronder:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B007",
+      "label": "“Robots”, met een of meer van de hieronder vermelde eigenschappen, en speciaal ontworpen besturingsapparatuur en “eindeffectoren” daarvoor:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B008",
+      "label": "‘samengestelde draaitafels’ of “kantelspillen”, speciaal ontworpen voor werktuigmachines, als hieronder:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B009",
+      "label": "Forceer-(spin-forming) of vloei-(flow-forming) draaibanken, die, volgens de technische specificatie van fabrikant, kunnen worden uitgerust met “numerieke besturings”-eenheden of computerbesturing, en die beide volgende eigenschappen bezitten:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B104",
+      "label": "“Isostatische persen”, anders dan bedoeld in 2B004, met alle volgende eigenschappen:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B105",
+      "label": "Ovens voor chemische afzetting uit de dampfase (CVD), anders dan bedoeld in 2B005.a., ontworpen of aangepast voor het verdichten van koolstof-koolstofcomposieten.",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B109",
+      "label": "Andere vloeidraaibanken dan die bedoeld in 2B009, die kunnen worden gebruikt voor de “productie” van onderdelen en uitrusting (bv. motorhuizen en verbindingsstukken) voor de voorstuwing van “raketten”, en speciaal ontworpen onderdelen als hieronder:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B116",
+      "label": "Systemen en apparatuur voor het beproeven door middel van trillingen en componenten daarvoor, als hieronder:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B117",
+      "label": "Apparatuur en procesregeleenheden, met uitzondering van die bedoeld in 2B004, 2B005.a., 2B104 of 2B105, ontworpen of aangepast voor de verdichting en pyrolyse van composiet raketstraalpijpen en neuskegels voor terugkeervoertuigen (‹reentry›).",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B119",
+      "label": "Balanceermachines en aanverwante uitrusting, als hieronder:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B120",
+      "label": "Bewegingssimulatoren of kwalificatietafels die alle navolgende eigenschappen hebben:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B121",
+      "label": "Andere dan de in 2B120 aangegeven insteltafels (apparatuur, geschikt voor precieze roterende instelling in elke as), die alle navolgende eigenschappen hebben:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B122",
+      "label": "Centrifuges die versnellingen van meer dan 100 g kunnen overbrengen en die ontworpen of aangepast zijn om sleepringen of geïntegreerde onderbrekingsvoorzieningen te bevatten die geschikt zijn om elektrisch vermogen, signaalinformatie dan wel beiden, over te brengen.",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B201",
+      "label": "Werktuigmachines en iedere andere combinatie daarvan, anders dan bedoeld in 2B001, voor het verspanen of snijden van metalen, keramische materialen of “composieten”, die volgens de technische specificaties van de fabrikant kunnen worden uitgerust met elektronische toestellen voor gelijktijdig “contourbesturen” in twee of meer assen:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B204",
+      "label": "“Isostatische persen”, anders dan die bedoeld in 2B004 of 2B104 en bijbehorende apparatuur, als hieronder:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B206",
+      "label": "Niet onder 2B006 opgenomen meetmachines, -instrumenten of -systemen, als hieronder:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B207",
+      "label": "“Robots”, “eindeffectoren” en besturingseenheden, anders dan bedoeld in 2B007, als hieronder:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B209",
+      "label": "Vloei- (‹flow-forming›)draaibanken, forceer(‹spin-forming›)draaibanken die vloei-draaifuncties kunnen verrichten, anders dan bedoeld in 2B009 of 2B109, en spillen, als hieronder:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B219",
+      "label": "Centrifugale balanceermachines voor het uitbalanceren in verscheidene vlakken, vast of draagbaar, horizontaal of verticaal, als hieronder:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B225",
+      "label": "Op afstand bediende manipulatoren die kunnen worden aangewend voor het doen verrichten van handelingen op afstand bij radiochemische scheidingswerkingen of in hete cellen, met één van de volgende eigenschappen:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B226",
+      "label": "Inductieovens, werkend met beheerste atmosfeer (vacuüm of inert gas) en stroombronnen daarvoor, anders dan bedoeld in 9B001 en 3B001, als hieronder:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B227",
+      "label": "Metallurgische smelt- en gietovens met vacuüm of op een andere wijze beheerste atmosfeer en bijbehorende apparatuur, als hieronder:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B228",
+      "label": "Apparatuur voor de vervaardiging of assemblage van rotoren, rotorrichtapparatuur, en matrijzen voor het vormen van balgen, als hieronder:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B230",
+      "label": "Alle soorten ‘drukomzetters’ geschikt voor het meten van de absolute druk en met alle volgende eigenschappen:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B231",
+      "label": "Vacuümpompen met alle volgende eigenschappen:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B232",
+      "label": "Kanonsystemen voor hoge snelheden (spoel-, elektromagnetische en thermo-elektrische types en andere geavanceerde systemen) die projectielen kunnen versnellen tot een snelheid van 1,5 km/s of meer.",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B233",
+      "label": "Compressoren met balgafdichting van het scroll-type en vacuümpompen met balgafdichting van het scroll-type met alle volgende eigenschappen:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B350",
+      "label": "Chemische productie-installaties, productieapparatuur en onderdelen daarvan, als hieronder:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B351",
+      "label": "Andere dan in 1A004 bedoelde controleapparatuur en -systemen voor giftige gassen en de speciaal daarvoor ontworpen detectieonderdelen ervan, als hieronder; en detectoren; sensoren; en vervangbare sensorpatronen daarvoor:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B352",
+      "label": "Uitrusting voor biologische vervaardiging en verwerking, als hieronder:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2B510",
+      "label": "Apparatuur voor additieve productie, ontworpen voor de productie van onderdelen van metaal of metaallegeringen, met alle volgende eigenschappen, en speciaal daarvoor ontworpen onderdelen:",
+      "category": "2",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "2D001",
+      "label": "“Programmatuur” anders dan bedoeld in 2D002, als hieronder:",
+      "category": "2",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "2D002",
+      "label": "“Programmatuur” voor elektronische toestellen, ook wanneer geïntegreerd in een elektronisch toestel of systeem, waardoor dergelijke toestellen of systemen kunnen functioneren als “numerieke besturings”-eenheid, en geschikt om meer dan vier assen gelijktijdig te laten samenwerken voor “contourbesturen”.",
+      "category": "2",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "2D003",
+      "label": "“Programmatuur” ontworpen of aangepast voor de werking van apparatuur, vermeld in 2B002, die het optische ontwerp, de metingen van het werkstuk en de functies voor de verwijdering van materiaal omzet in “numerieke besturings”- opdrachten voor het bereiken van de gewenste werkstukvorm.",
+      "category": "2",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "2D101",
+      "label": "“Programmatuur” speciaal ontworpen of aangepast voor het “gebruik” van apparatuur, bedoeld in 2B104, 2B105, 2B109, 2B116, 2B117 of 2B119 tot en met 2B122.",
+      "category": "2",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "2D201",
+      "label": "“Programmatuur” speciaal ontworpen voor het “gebruik” van apparatuur, bedoeld in 2B204, 2B206, 2B207, 2B209, 2B219 of 2B227.",
+      "category": "2",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "2D202",
+      "label": "“Programmatuur”, speciaal ontworpen of aangepast voor de “ontwikkeling”, de “productie” of het “gebruik” van apparatuur vermeld in 2B201.",
+      "category": "2",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "2D351",
+      "label": "Andere “programmatuur” dan die als bedoeld in 1D003, speciaal ontworpen voor het “gebruik” van apparatuur, bedoeld in 2B351.",
+      "category": "2",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "2D352",
+      "label": "“Programmatuur” speciaal ontworpen voor samenstellers en synthesizers van nucleïnezuren bedoeld in 2B352.i., geschikt voor het ontwerpen en aanmaken van functionele genetische elementen op basis van digitale sequentiegegevens.",
+      "category": "2",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "2E001",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot betreffende de “ontwikkeling” van apparatuur of “programmatuur”, vermeld in 2A, 2B of 2D.",
+      "category": "2",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "2E002",
+      "label": "“Technologie” volgens de algemene technologienoot voor de “productie” van apparatuur, bedoeld in 2A of 2B.",
+      "category": "2",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "2E003",
+      "label": "Andere “technologie”, als hieronder:",
+      "category": "2",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "2E101",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor het “gebruik” van apparatuur of “programmatuur”, bedoeld in 2B004, 2B009, 2B104, 2B109, 2B116, 2B119 tot en met 2B122 of 2D101.",
+      "category": "2",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "2E201",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor het “gebruik” van apparatuur of “programmatuur”, bedoeld in 2A225, 2A226, 2B001, 2B006, 2B007.b., 2B007.c., 2B008, 2B009, 2B201, 2B204, 2B206, 2B207, 2B209, 2B225 tot en met 2B233, 2D201 of 2D202.",
+      "category": "2",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "2E301",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor het “gebruik” van goederen, bedoeld in 2B350 tot en met 2B352.",
+      "category": "2",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "2E503",
+      "label": "“Technologie”, als hieronder:",
+      "category": "2",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "3A001",
+      "label": "Elektronische producten, als hieronder:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A001.b.12",
+      "label": "is van toepassing op ‘zend-/ontvangstmodules’ of ‘zendmodules’ met of zonder koelelement. De waarde van d in 3A001.b.12.c. omvat geen delen van de ‘zend-/ontvangstmodule’ of ‘zendmodule’ die als koelelement fungeren.",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 2
+    },
+    {
+      "code": "3A002",
+      "label": "Universele “elektronische samenstellingen”, modules en apparatuur, als hieronder:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A003",
+      "label": "Temperatuurregelingssystemen met nevelkoeling die gebruikmaken van apparatuur met een gesloten vloeistofcirculatie en -reconditioneringscircuit in een lucht- en waterdicht omhulsel waarin met speciaal daartoe ontworpen spuitmonden een diëlektrische vloeistof op elektronische componenten wordt verneveld om deze binnen de gebruikstemperatuur te houden, en speciaal hiervoor ontworpen onderdelen.",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A101",
+      "label": "Elektronische uitrusting, elementen en onderdelen, anders dan vermeld in 3A001, als hieronder:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A102",
+      "label": "‘Thermische batterijen’ ontworpen of aangepast voor ‘raketten’.",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A201",
+      "label": "Elektronische onderdelen, anders dan vermeld in 3A001, als hieronder:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A225",
+      "label": "Frequentieomzetters of frequentiegeneratoren anders dan die, welke zijn vermeld in 0B001.b.13., te gebruiken als: aandrijfeenheden met variabele of vaste frequentie, met alle volgende eigenschappen:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A226",
+      "label": "Gelijkstroombronnen met hoog vermogen, anders dan bedoeld in 0B001.j.6., met beide volgende eigenschappen:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A227",
+      "label": "Hoogspanningsgelijkstroombronnen, anders dan vermeld in 0B001.j.5., met beide volgende eigenschappen:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A228",
+      "label": "Schakelelementen, als hieronder:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A229",
+      "label": "Pulsgeneratoren met hoge stroomsterkte, als hieronder:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A230",
+      "label": "Snelle pulsgeneratoren en ‘pulskoppen’ daarvoor, met beide van de volgende eigenschappen:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A231",
+      "label": "Neutronengeneratorsystemen, met inbegrip van buizen, met beide volgende eigenschappen:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A232",
+      "label": "Andere dan de in 1A007 bedoelde meervoudige ontstekingssystemen, als hieronder:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A233",
+      "label": "Massaspectrometers, anders dan vermeld in 0B002.g., die ionen met een massa van 230 u of meer kunnen meten en die een oplossend vermogen hebben dat beter is dan 2 u op 230 u, en ionenbronnen hiervoor, als hieronder:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A234",
+      "label": "Striplines om te voorzien in een lage-inductiviteitspad naar ontstekers met de volgende eigenschappen:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A501",
+      "label": "Elektronische producten, als hieronder:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A502",
+      "label": "Universele “elektronische samenstellingen”, modules en apparatuur, als hieronder:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3A504",
+      "label": "Cryogene koelsystemen en onderdelen, als hieronder:",
+      "category": "3",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "3B001",
+      "label": "Productieapparatuur voor halfgeleiderelementen of materialen, als hieronder, en speciaal ontworpen onderdelen en toebehoren daarvoor:",
+      "category": "3",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "3B002",
+      "label": "Testapparatuur, speciaal ontworpen voor het testen van afgewerkte of half-afgewerkte halfgeleiderelementen, als hieronder, en speciaal daarvoor ontworpen onderdelen en toebehoren:",
+      "category": "3",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "3B501",
+      "label": "Productieapparatuur voor halfgeleiderelementen of materialen, als hieronder, en speciaal ontworpen onderdelen en toebehoren daarvoor:",
+      "category": "3",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "3B503",
+      "label": "Apparatuur voor rasterelektronenmicroscopen (SEM, ‹Scanning Electron Microscope›), ontworpen voor het in beeld brengen van halfgeleiderelementen of geïntegreerde schakelingen, met alle volgende eigenschappen:",
+      "category": "3",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "3B504",
+      "label": "Cryogene apparatuur voor het testen van wafers met alle volgende eigenschappen:",
+      "category": "3",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "3C001",
+      "label": "Hetero-epitaxiale materialen, niet bedoeld in 3C507, bestaande uit een “substraat” met verscheidene gestapelde epitaxiaal gegroeide lagen van één of meer van de volgende stoffen:",
+      "category": "3",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "3C002",
+      "label": "‹Resists› (gevoelige lagen), als hieronder, en “substraten” bekleed met de volgende ‹resists›:",
+      "category": "3",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "3C003",
+      "label": "Organisch-anorganische verbindingen, als hieronder:",
+      "category": "3",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "3C004",
+      "label": "Hydriden van fosfor, arseen of antimoon, met een zuiverheid hoger (beter) dan 99,999 %, zelfs bij verdunning in edelgassen of waterstof.",
+      "category": "3",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "3C005",
+      "label": "Materialen met hoge weerstand, zoals hieronder:",
+      "category": "3",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "3C006",
+      "label": "Materialen, niet vermeld in 3C001, bestaande uit een in 3C005 bedoeld “substraat” met ten minste één epitaxiale laag siliciumcarbide (SiC), galliumnitride (GaN), aluminiumnitride (AlN), aluminiumgalliumnitride (AlGaN), galliumoxide (Ga2O3) of diamant.",
+      "category": "3",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "3C507",
+      "label": "Epitaxiale materialen bestaande uit een “substraat” met ten minste één epitaxiaal gegroeide laag van één of meer van de volgende stoffen:",
+      "category": "3",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "3C508",
+      "label": "Fluoriden, hydriden of chloriden, van silicium of van germanium, bevattende een of meer van de volgende stoffen:",
+      "category": "3",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "3C509",
+      "label": "Silicium, siliciumoxiden, germanium of germaniumoxiden, bevattende een of meer van de volgende stoffen:",
+      "category": "3",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "3D001",
+      "label": "“Programmatuur” speciaal ontworpen voor de “ontwikkeling” of “productie” van apparatuur vermeld in 3A001.b. tot en met 3A002.h., 3A501.b.13 of 3B.",
+      "category": "3",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "3D002",
+      "label": "“Programmatuur” speciaal ontworpen voor het “gebruik” van apparatuur vermeld in 3B001.a. tot en met 3B001.f., 3B002, 3A225, 3B501.a.4., 3B501.f.1., 3B501.k. of 3B501.n.",
+      "category": "3",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "3D003",
+      "label": "“Programmatuur” voor ‘computerlithografie’, speciaal ontworpen voor de “ontwikkeling” van patronen op maskers of fijne optische netwerken (‹reticles›) voor EUV-lithografie.",
+      "category": "3",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "3D004",
+      "label": "“Programmatuur”, speciaal ontworpen voor de “ontwikkeling” van apparatuur als vermeld in 3A003.",
+      "category": "3",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "3D005",
+      "label": "“Programmatuur”, speciaal ontworpen om de normale werking van een microcomputer, “microprocessor-microschakeling” of “microcomputer-microschakeling” binnen 1 ms na een verstoring door een elektromagnetische puls (EMP) of een elektrostatische ontlading (ESD) te hervatten zonder dat de werking is onderbroken.",
+      "category": "3",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "3D006",
+      "label": "“Programmatuur” voor ‘elektronisch computerondersteund ontwerpen’ (‘ECAD’), speciaal ontworpen voor de “ontwikkeling” van geïntegreerde schakelingen met een op “‹Gate-All-Around›-veldeffecttransistors” (“GAAFET”) berustende structuur, en met een of meer van de volgende kenmerken:",
+      "category": "3",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "3D101",
+      "label": "“Programmatuur”, speciaal ontworpen of aangepast voor het “gebruik” van apparatuur als vermeld in 3A101.b.",
+      "category": "3",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "3D225",
+      "label": "“Programmatuur” speciaal ontworpen voor het verbeteren of leveren van de prestaties van frequentieomzetters of frequentiegeneratoren om te voldoen aan de eigenschappen van 3A225.",
+      "category": "3",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "3D507",
+      "label": "“Programmatuur” die is ontworpen om ‘GDSII’- of gelijkwaardige gestandaardiseerde lay-outgegevens te extraheren en een laag-voor-laag-alignering uit te voeren op basis van beelden van rasterelektronenmicroscopen, en de netlijst of ‘GDSII’-gegevens met meerdere lagen te genereren.",
+      "category": "3",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "3E001",
+      "label": "“Technologie” volgens de algemene technologienoot voor de “ontwikkeling” of “productie” van apparatuur of materialen vermeld in 3A, 3B of 3C.",
+      "category": "3",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "3E002",
+      "label": "“Technologie” volgens de algemene technologienoot, anders dan vermeld in 3E001, voor de “ontwikkeling” of de “productie” van een “microprocessor-microschakelings-”, een “microcomputer-microschakelings-” of een microbesturings-microschakelingskern met een logische rekeneenheid (ALU) met een toegangsbereik van 32 bit of meer en met één of meer van de volgende eigenschappen:",
+      "category": "3",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "3E003",
+      "label": "Andere “technologie” voor de “ontwikkeling” of “productie” van:",
+      "category": "3",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "3E004",
+      "label": "“Technologie” die “noodzakelijk” is voor het snijden, slijpen en polijsten van siliciumwafers met een diameter van 300 mm teneinde een ‘Site Front least sQuares Range’ (‘SFQR’) van 20 nm of minder voor elke punt van 26 mm × 8 mm op de bovenkant van de wafer, gemeten tot op 2 mm of minder van de rand, te bereiken.",
+      "category": "3",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "3E101",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor het “gebruik” van apparatuur of “programmatuur”, vermeld in 3A001.a.1. of 2., 3A101, 3A102 of 3D101.",
+      "category": "3",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "3E102",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor de “ontwikkeling” van “programmatuur”, bedoeld in 3D101.",
+      "category": "3",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "3E201",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor het “gebruik” van apparatuur, vermeld in 3A001.e.2., 3A001.e.3., 3A001.g., 3A201, 3A225 tot en met 3A234.",
+      "category": "3",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "3E225",
+      "label": "“Technologie” in de vorm van codes of sleutels voor het verbeteren of leveren van de prestaties van frequentieomzetters of frequentiegeneratoren om te voldoen aan de eigenschappen van 3A225.",
+      "category": "3",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "3E505",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor de “ontwikkeling” of “productie” van geïntegreerde schakelingen of elementen, waarbij gebruik wordt gemaakt van “‹Gate-All-Around›-veldeffecttransistor”-(“GAAFET”)-structuren.",
+      "category": "3",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "4A001",
+      "label": "Elektronische computers en aanverwante apparatuur, met één of meer van de volgende en “elektronische samenstellingen” en speciaal ontworpen onderdelen daarvoor:",
+      "category": "4",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "4A003",
+      "label": "“Digitale computers”, “elektronische samenstellingen” en aanverwante apparatuur daarvoor, zoals hieronder vermeld, en speciaal daarvoor ontworpen onderdelen:",
+      "category": "4",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "4A004",
+      "label": "Computers, als hieronder, en speciaal daarvoor ontworpen aanverwante apparatuur, “elektronische samenstellingen” en onderdelen daarvoor:",
+      "category": "4",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "4A005",
+      "label": "Systemen, apparatuur en onderdelen daarvan, speciaal ontworpen of aangepast voor het maken, controleren en besturen of leveren van “inbraakprogrammatuur”.",
+      "category": "4",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "4A101",
+      "label": "Analoge computers, “digitale computers” of digitale differentiaalanalysators, anders dan bedoeld in 4A001.a.1., geschikt voor ruw gebruik en ontworpen of aangepast voor gebruik in ruimtelanceervoertuigen, vermeld in 9A004, of sonderingsraketten, vermeld in 9A104.",
+      "category": "4",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "4A102",
+      "label": "“Hybride computers”, speciaal ontworpen voor het modelleren, simuleren of integreren van het ontwerp van ruimtelanceervoertuigen, vermeld in 9A004, of sonderingsraketten, vermeld in 9A104.",
+      "category": "4",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "4A506",
+      "label": "Kwantumcomputers en aanverwante “elektronische samenstellingen” en onderdelen daarvoor, als hieronder:",
+      "category": "4",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "4A507",
+      "label": "Computers, “elektronische samenstellingen” en onderdelen die een of meer geïntegreerde schakelingen bevatten, bedoeld in 3A501.a.16.",
+      "category": "4",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "4D001",
+      "label": "“Programmatuur”, als hieronder:",
+      "category": "4",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "4D004",
+      "label": "“Programmatuur”, speciaal ontworpen of aangepast voor het maken, controleren en besturen of leveren van “inbraakprogrammatuur”.",
+      "category": "4",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "4E001",
+      "label": "“Technologie”, als hieronder:",
+      "category": "4",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "5A001",
+      "label": "Telecommunicatiesystemen, apparatuur, onderdelen en toebehoren, als hieronder:",
+      "category": "5",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "5A101",
+      "label": "Apparatuur voor telemetrie en afstandsbesturing, inclusief grondapparatuur die is ontworpen of aangepast voor ‘raketten’.",
+      "category": "5",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "5B001",
+      "label": "Test-, inspectie- en productieapparatuur voor telecommunicatiesystemen, en onderdelen en toebehoren daarvoor, als hieronder:",
+      "category": "5",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "5D001",
+      "label": "“Programmatuur”, als hieronder:",
+      "category": "5",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "5D101",
+      "label": "“Programmatuur” speciaal ontworpen of aangepast voor het “gebruik” van apparatuur, bedoeld in 5A101.",
+      "category": "5",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "5E001",
+      "label": "“Technologie”, als hieronder:",
+      "category": "5",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "5E101",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor de “ontwikkeling”, de “productie” of het “gebruik” van apparatuur bedoeld in 5A101.",
+      "category": "5",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "5A002",
+      "label": "Systemen en apparatuur voor “informatiebeveiliging” en componenten, als hieronder:",
+      "category": "5",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "5A003",
+      "label": "Systemen, apparatuur en onderdelen voor niet-cryptografische “informatiebeveiliging”, als hieronder:",
+      "category": "5",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "5A004",
+      "label": "Systemen, apparatuur en onderdelen voor verslaan, verzwakken of omzeilen van “informatiebeveiliging”, als hieronder:",
+      "category": "5",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "5B002",
+      "label": "Test-, inspectie- en “productie”-apparatuur inzake “informatiebeveiliging”, als hieronder:",
+      "category": "5",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "5D002",
+      "label": "“Programmatuur”, als hieronder:",
+      "category": "5",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "5E002",
+      "label": "“Technologie”, als hieronder:",
+      "category": "5",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "6A001",
+      "label": "Akoestische systemen, apparatuur en onderdelen, als hieronder:",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "6A002",
+      "label": "Optische sensoren en apparatuur, en onderdelen daarvoor, als hieronder:",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "6A003",
+      "label": "Camerasystemen en -apparatuur, en onderdelen daarvoor, als hieronder:",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "6A004",
+      "label": "Optische apparatuur en onderdelen daarvoor, als hieronder:",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "6A005",
+      "label": "“Lasers”, anders dan bedoeld in 0B001.g.5. of 0B001.h.6., onderdelen en optische apparatuur, als hieronder:",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "6A006",
+      "label": "“Magnetometers”, “magnetische gradiëntmeters”, “intrinsieke magnetische gradiëntmeters”, sensoren voor het meten van elektrische velden onder water en “compensatiesystemen”, en speciaal daarvoor ontworpen onderdelen, als hieronder:",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "6A007",
+      "label": "Zwaartekrachtmeters (gravimeters) en zwaartekrachtgradiëntmeters, als hieronder:",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "6A008",
+      "label": "Radarsystemen, -apparatuur en -samenstellingen met één of meer van de volgende eigenschappen, en speciaal daarvoor ontworpen onderdelen:",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "6A102",
+      "label": "Stralingsbestendige ‘detectoren’, anders dan vermeld in 6A002, speciaal ontworpen of aangepast ter bescherming tegen nucleaire effecten (bijvoorbeeld elektromagnetische puls (EMP), röntgenstraling, combinatie van drukgolf en hitte) en geschikt voor gebruik in “raketten”, ontworpen of gespecificeerd als zijnde bestand tegen stralingsniveaus die overeenkomen met een totale stralingsdosis van 5 × 105 rad silicium of meer.",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "6A107",
+      "label": "Zwaartekrachtmeters (gravimeters) en onderdelen voor zwaartekrachtmeters, en zwaartekracht-gradiëntmeters, als hieronder:",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "6A108",
+      "label": "Radarsystemen, volgsystemen en radarkoepels, anders dan bedoeld in 6A008, als hieronder:",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "6A202",
+      "label": "Fotomultiplicatorbuizen met de volgende twee eigenschappen:",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "6A203",
+      "label": "Camera’s en onderdelen, anders dan bedoeld in 6A003, als hieronder:",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "6A205",
+      "label": "“Lasers”, “laser”-versterkers en -oscillatoren, anders dan bedoeld in 0B001.g.5., 0B001.h.6. en 6A005; als hieronder:",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "6A225",
+      "label": "Snelheidsinterferometers voor het meten van snelheden van meer dan 1 km per seconde over een tijdsinterval van minder dan 10 μs.",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "6A226",
+      "label": "Druksensoren, als hieronder:",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "6B002",
+      "label": "Maskers en fijne optische netwerken (‹reticles›), speciaal ontworpen voor optische sensoren vermeld in 6A002.a.1.b. of 6A002.a.1.d.",
+      "category": "6",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "6B004",
+      "label": "Optische apparatuur, als hieronder:",
+      "category": "6",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "6B007",
+      "label": "Apparatuur voor de productie, het richten en het ijken van op de grond gestationeerde zwaartekrachtmeters met een statische “nauwkeurigheid” van minder (beter) dan 0,1 mGal.",
+      "category": "6",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "6B008",
+      "label": "Gepulseerde radarsystemen voor het meten van de dwarsdoorsnede met een zendpuls-duur van 100 ns of minder en speciaal daarvoor ontworpen onderdelen.",
+      "category": "6",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "6B108",
+      "label": "Systemen, anders dan vermeld in 6B008, speciaal ontworpen voor het meten van radardwarsdoorsnedes geschikt voor gebruik in ‘raketten’, alsook subsystemen daarvan.",
+      "category": "6",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "6C002",
+      "label": "Materialen voor optische sensoren, als hieronder:",
+      "category": "6",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "6C004",
+      "label": "Optische materialen, als hieronder:",
+      "category": "6",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "6C005",
+      "label": "“Laser”-materialen, als hieronder:",
+      "category": "6",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "6D001",
+      "label": "“Programmatuur”, speciaal ontworpen voor de “ontwikkeling” of “productie” van apparatuur, vermeld in 6A004, 6A005, 6A008 of 6B008.",
+      "category": "6",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "6D002",
+      "label": "“Programmatuur”, speciaal ontworpen voor het “gebruik” van apparatuur, vermeld in 6A002.b., 6A008 of 6B008.",
+      "category": "6",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "6D003",
+      "label": "Overige “programmatuur”, als hieronder:",
+      "category": "6",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "6D102",
+      "label": "“Programmatuur”, speciaal ontworpen of aangepast voor het “gebruik” van in 6A108 bedoelde goederen.",
+      "category": "6",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "6D103",
+      "label": "“Programmatuur” voor het na de vlucht verwerken van geregistreerde gegevens, waarmee de positie tijdens het gehele vluchttraject kan worden bepaald, speciaal ontworpen of aangepast voor ‘raketten’.",
+      "category": "6",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "6D203",
+      "label": "“Programmatuur” speciaal ontworpen om de prestaties van camera’s of beeldvormingsapparaten te verbeteren of te leveren of om te voldoen aan de eigenschappen van 6A203.a. tot en met 6A203.c.",
+      "category": "6",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "6E001",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot betreffende de “ontwikkeling” van apparatuur, materialen of “programmatuur”, vermeld in 6A, 6B, 6C of 6D.",
+      "category": "6",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "6E002",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor de “productie” van apparatuur of materialen, vermeld in 6A, 6B of 6C.",
+      "category": "6",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "6E003",
+      "label": "Andere “technologie”, als hieronder:",
+      "category": "6",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "6E101",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor het “gebruik” van apparatuur of “programmatuur”, bedoeld in 6A002, 6A007.b. en c., 6A008, 6A102, 6A107, 6A108, 6B108, 6D102 of 6D103.",
+      "category": "6",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "6E201",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor het “gebruik” van apparatuur, vermeld in 6A003, 6A005.a.2., 6A005.b.2., 6A005.b.3., 6A005.b.4., 6A005.b.6., 6A005.c.2., 6A005.d.3.c., 6A005.d.4.c., 6A202, 6A203, 6A205, 6A225 en 6A226.",
+      "category": "6",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "6E203",
+      "label": "“Technologie”, in de vorm van codes of sleutels om de prestaties van camera’s of beeldvormingsapparaten te verbeteren of te leveren, teneinde de eigenschappen van 6A203.a. tot en met 6A203.c. te vervullen.",
+      "category": "6",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "7A001",
+      "label": "Versnellingsmeters en speciaal daarvoor ontworpen onderdelen, als hieronder:",
+      "category": "7",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "7A002",
+      "label": "Gyroscopen of hoekbewegingsensoren, met één of meer van de volgende eigenschappen en speciaal daarvoor ontworpen onderdelen:",
+      "category": "7",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "7A003",
+      "label": "‘Traagheidsmetingsapparatuur of -systemen’ met één of meer van de volgende eigenschappen:",
+      "category": "7",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "7A004",
+      "label": "‘Sterrenvolgers’ en onderdelen daarvoor, als hieronder:",
+      "category": "7",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "7A005",
+      "label": "Ontvangstapparatuur voor een “satellietnavigatiesysteem” met één of meer van de volgende eigenschappen, en speciaal daarvoor ontworpen onderdelen:",
+      "category": "7",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "7A006",
+      "label": "Hoogtemeters voor gebruik in luchtvaartuigen met werkfrequenties buiten het gebied van 4,2 tot en met 4,4 GHz, met één of meerdere van de volgende eigenschappen:",
+      "category": "7",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "7A008",
+      "label": "Onderwatersonarnavigatiesystemen met Doppler- of correlatiesnelheidsapparatuur met een richtingsbron, met een positionerings-“nauwkeurigheid” gelijk aan of minder (beter) dan 3 % van de “Circular Error Probable” (“CEP”) van de afgelegde afstand en met speciaal daarvoor ontworpen onderdelen.",
+      "category": "7",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "7A101",
+      "label": "Lineaire versnellingsmeters, anders dan bedoeld in 7A001, die ontworpen zijn voor gebruik in traagheidsnavigatiesystemen of in geleidingssystemen van alle soorten, geschikt voor gebruik in ‘raketten’, met de volgende eigenschappen, en speciaal daarvoor ontworpen onderdelen:",
+      "category": "7",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "7A102",
+      "label": "Alle types gyroscopen, anders dan bedoeld in 7A002, geschikt voor gebruik in ‘raketten’, met een gespecificeerde ‘stabiliteit’ van de “verloopsnelheid” (een gespecificeerde vrije precessie) van minder dan 0,5 ° (1 sigma of effectief (rms)) per uur bij een versnellingsniveau van 1 g, en speciaal daarvoor ontworpen onderdelen.",
+      "category": "7",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "7A103",
+      "label": "Instrumentatie, navigatieapparatuur en systemen, anders dan bedoeld in 7A003, als hieronder, en speciaal daarvoor ontworpen onderdelen:",
+      "category": "7",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "7A104",
+      "label": "Astro-gyrokompassen en andere apparaten, anders dan bedoeld in 7A004, voor het bepalen van plaats en richting door het automatisch volgen van hemellichamen of satellieten, en speciaal daarvoor ontworpen onderdelen.",
+      "category": "7",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "7A105",
+      "label": "Ontvangstapparatuur voor navigatiesatellietsystemen, anders dan bedoeld in 7A005, met één of meer van de volgende eigenschappen, en speciaal daarvoor ontworpen onderdelen:",
+      "category": "7",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "7A106",
+      "label": "Hoogtemeters, anders dan bedoeld in 7A006, van het radar- of laserradartype, ontworpen of aangepast voor gebruik in ruimtelanceervoertuigen, bedoeld in 9A004, of sonderings-raketten, bedoeld in 9A104.",
+      "category": "7",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "7A115",
+      "label": "Passieve sensoren voor het bepalen van de positie ten opzichte van bepaalde elektromagnetische bronnen (richtingsbepalingsapparatuur) of van karakteristieken van het terrein, ontworpen of aangepast voor gebruik in ruimtelanceervoertuigen, bedoeld in 9A004, of sonderingsraketten, bedoeld in 9A104.",
+      "category": "7",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "7A116",
+      "label": "Vluchtregelsystemen en servokleppen, als hieronder, ontworpen of aangepast voor gebruik in ruimtelanceervoertuigen bedoeld in 9A004, sonderingsraketten bedoeld in 9A104, of “raketten”.",
+      "category": "7",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "7A117",
+      "label": "”Geleidingssystemen” geschikt voor gebruik in “raketten” met een systeemnauwkeurigheid van 3,33 % of minder van het bereik (bv. een ‘CEP’ van 10 km of minder bij een bereik van 300 km).",
+      "category": "7",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "7B001",
+      "label": "Test-, ijk- of uitrichtapparatuur, speciaal ontworpen voor apparatuur, als bedoeld in 7A.",
+      "category": "7",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "7B002",
+      "label": "Apparatuur, speciaal ontworpen voor het bepalen van de karakteristieken van spiegels voor ring-“laser”-gyroscopen, als hieronder:",
+      "category": "7",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "7B003",
+      "label": "Apparatuur, speciaal ontworpen voor de “productie” van apparatuur, bedoeld in 7A.",
+      "category": "7",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "7B102",
+      "label": "Reflectometers, speciaal ontworpen voor het karakteriseren van spiegels voor “laser” -gyroscopen met een meetnauwkeurigheid van minder (of beter) dan 50 ppm.",
+      "category": "7",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "7B103",
+      "label": "“Productiefaciliteiten” en “productieapparatuur”, als hieronder:",
+      "category": "7",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "7D001",
+      "label": "“Programmatuur”, speciaal ontworpen of aangepast voor de “ontwikkeling” of “productie” van apparatuur, als bedoeld in 7A of 7B.",
+      "category": "7",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "7D002",
+      "label": "“Broncode” voor het gebruik of onderhoud van iedere traagheidsnavigatieapparatuur met inbegrip van traagheidsapparatuur die niet is bedoeld in 7A003 of 7A004, of stand- en koersreferentiesystemen (‹Attitude and Heading Reference Systems› (AHRS)).",
+      "category": "7",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "7D003",
+      "label": "Overige “programmatuur”, als hieronder:",
+      "category": "7",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "7D004",
+      "label": "“Broncode”, waarin de “ontwikkelings”-“technologie”, bedoeld in 7E004.a.2., 7E004.a.3., 7E004.a.5., 7E004.a.6. of 7E004.b., wordt opgenomen, voor één of meer van de volgende systemen of toepassingen:",
+      "category": "7",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "7D005",
+      "label": "“Programmatuur” speciaal ontworpen voor het decoderen van voor gebruik door de overheid ontworpen bepalingscodes voor een “satellietnavigatiesysteem”.",
+      "category": "7",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "7D101",
+      "label": "“Programmatuur” speciaal ontworpen of aangepast voor het “gebruik” van apparatuur, bedoeld in 7A001 tot en met 7A006, 7A101 tot en met 7A106, 7A115, 7A116.a., 7A116.b., 7B001, 7B002, 7B003, 7B102 of 7B103.",
+      "category": "7",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "7D102",
+      "label": "Integratie-“programmatuur”, als hieronder:",
+      "category": "7",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "7D103",
+      "label": "“Programmatuur” speciaal ontworpen voor het modelleren of simuleren van de “geleidingssystemen”, bedoeld in 7A117, of voor de ontwerpintegratie met de ruimtelanceervoertuigen, bedoeld in 9A004, of sonderingsraketten, bedoeld in 9A104.",
+      "category": "7",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "7D104",
+      "label": "“Programmatuur”, speciaal ontworpen of aangepast voor de werking of het onderhoud van in 7A117 bedoelde “geleidingssystemen”.",
+      "category": "7",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "7E001",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor de “ontwikkeling” van apparatuur of “programmatuur”, bedoeld in 7A, 7B, 7D001, 7D002, 7D003, 7D005 en 7D101 tot en met 7D103.",
+      "category": "7",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "7E002",
+      "label": "“Technologie” volgens de algemene technologienoot voor de “productie” van apparatuur, bedoeld in 7 A of 7 B.",
+      "category": "7",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "7E003",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor reparatie, opknappen of revisie van apparatuur, bedoeld in 7A001 tot en met 7A004.",
+      "category": "7",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "7E004",
+      "label": "Andere “technologie”, als hieronder:",
+      "category": "7",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "7E101",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor het “gebruik” van apparatuur, bedoeld in 7A001 tot en met 7A006, 7A101 tot en met 7A106, 7A115 tot en met 7A117, 7B001, 7B002, 7B003, 7B102, 7B103, 7D101 tot en met 7D103.",
+      "category": "7",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "7E102",
+      "label": "“Technologie” voor de bescherming van elektronische vliegtuigsystemen en elektrische subsystemen tegen elektromagnetische pulsen (EMP) en elektromagnetische storingen (EMI) door buiten het systeem gelegen bronnen, als hieronder:",
+      "category": "7",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "7E104",
+      "label": "“Technologie” voor het integreren van vluchtregel-, navigatie- en voortstuwingsregelgegevens in een vluchtbeheerssysteem om de baan van raketten te optimaliseren.",
+      "category": "7",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "8A001",
+      "label": "Onderwatervoertuigen en oppervlaktevaartuigen, als hieronder:",
+      "category": "8",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "8A002",
+      "label": "Mariene systemen, apparatuur en onderdelen, als hieronder:",
+      "category": "8",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "8B001",
+      "label": "Watertunnels ontworpen om de achtergrondruis te beperken tot minder dan 100 dB (referentie: 1 μPa, 1 Hz) binnen het frequentiegebied hoger dan 0 Hz tot ten hoogste 500 Hz en ontworpen voor het meten van akoestische velden voortgebracht door een waterstroming rond modellen van voortstuwingssystemen.",
+      "category": "8",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "8C001",
+      "label": "‘Syntactisch schuim’ voor gebruik onder water, met de volgende eigenschappen:",
+      "category": "8",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "8D001",
+      "label": "“Programmatuur”, speciaal ontworpen of aangepast voor de “ontwikkeling”, de “productie” of het “gebruik” van apparatuur of materialen, bedoeld in 8A, 8B of 8C.",
+      "category": "8",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "8D002",
+      "label": "Specifieke “programmatuur”, speciaal ontworpen of aangepast voor de “ontwikkeling”, de “productie”, het herstel, de revisie of het opknappen (opnieuw machinaal bewerken) van schroeven die speciaal zijn ontworpen om onderwatergeluid te beperken.",
+      "category": "8",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "8E001",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor de “ontwikkeling” of “productie” van apparatuur of materialen, bedoeld in 8A, 8B of 8C.",
+      "category": "8",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "8E002",
+      "label": "Andere “technologie”, als hieronder:",
+      "category": "8",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "9A001",
+      "label": "Gasturbinemotoren voor luchtvaartuigen met één of meer van de volgende eigenschappen:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A002",
+      "label": "‘Gasturbinemotoren voor schepen’ ontworpen om vloeibare brandstof te gebruiken, met alle volgende eigenschappen, en speciaal daarvoor ontworpen samenstellingen en onderdelen:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A003",
+      "label": "Speciaal ontworpen samenstellingen of onderdelen die één of meer van de “technologieën” bevatten zoals vermeld in 9E003.a., 9E003.h., 9E003.i. of 9E003.k., voor één of meer van de volgende gasturbinemotoren:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A004",
+      "label": "Ruimtelanceervoertuigen, “ruimtevaartuigen”, “platforms van ruimtevaartuigen”, “missie-uitrusting van ruimtevaartuigen”, boordsystemen of -apparatuur voor “ruimtevaartuigen”, grondapparatuur, platforms voor lancering vanuit de lucht en “toestellen voor suborbitale vluchten” als hieronder:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A005",
+      "label": "Raketvoortstuwingssystemen met vloeibare stuwstof die systemen of onderdelen bevatten die zijn bedoeld in 9A006.",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A006",
+      "label": "Systemen of onderdelen, speciaal ontworpen voor raketvoortstuwingssystemen met vloeibare stuwstof, als hieronder:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A007",
+      "label": "Raketvoortstuwingssystemen met vaste stuwstof met één of meer van de volgende eigenschappen:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A008",
+      "label": "Onderdelen, speciaal ontworpen voor raketvoortstuwingssystemen met vaste stuwstof, als hieronder:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A009",
+      "label": "Hybride raketvoortstuwingssystemen met:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A010",
+      "label": "Speciaal ontworpen onderdelen, systemen en structuren voor lanceervoertuigen, voortstuwingssystemen voor lanceervoertuigen of “ruimtevaartuigen”, als hieronder:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A011",
+      "label": "Stuwstraalmotoren (‹ramjet› en ‹scramjet›) of motoren met een gecombineerde thermodynamische cyclus, en speciaal daarvoor ontworpen onderdelen.",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A012",
+      "label": "“Onbemande luchtvaartuigen” (“UAV’s”), onbemande “luchtschepen”, verwante systemen, apparatuur en onderdelen, als hieronder:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A101",
+      "label": "Turbinestraal- en turbofanmotoren, anders dan bedoeld in 9A001, als hieronder:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A102",
+      "label": "‘Motorsystemen met turbopropeller’, speciaal ontworpen voor onbemande luchtvaartuigen als bedoeld in 9A012 of 9A112.a., en speciaal daarvoor ontworpen onderdelen, met een ‘maximaal vermogen’ van meer dan 10 kW.",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A104",
+      "label": "Sonderingsraketten met een bereik van minstens 300 km.",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A105",
+      "label": "Raketmotoren voor vloeibare stuwstof of raketmotoren voor gel-stuwstof (‹gel propellant›), als hieronder:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A106",
+      "label": "Systemen of onderdelen, anders dan bedoeld in 9A006, als hieronder, speciaal ontworpen voor raketvoortstuwingssystemen met vloeibare stuwstof of met gel-stuwstof (‹gel propellant›):",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A107",
+      "label": "Raketmotoren voor vaste stuwstof, geschikt voor gebruik in complete raketsystemen of onbemande luchtvaartuigen met een bereik van 300 km, anders dan bedoeld in 9A007, met een totaal impulsvermogen gelijk aan of groter dan 0,841 MNs.",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A108",
+      "label": "Onderdelen, andere dan bedoeld in 9A008, als hieronder, speciaal ontworpen voor raketvoortstuwingssystemen met vaste en hybride brandstof:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A109",
+      "label": "Hybride raketmotoren en speciaal daarvoor ontworpen onderdelen, als hieronder:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A110",
+      "label": "Composietmateriaal structuren, laminaten en daarvan vervaardigde producten, anders dan bedoeld in 9A010, speciaal ontworpen voor gebruik in ‘raketten’ of in de subsystemen, bedoeld in 9A005, 9A007, 9A105, 9A106.c., 9A107, 9A108.c., 9A116 of 9A119.",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A111",
+      "label": "Pulserende straalmotoren of detonatiemotoren, geschikt voor gebruik in “raketten” of onbemande luchtvaartuigen, genoemd in 9A012 of 9A112.a., en speciaal ontworpen onderdelen daarvoor.",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A112",
+      "label": "“Onbemande luchtvaartuigen” (“UAV’s”), anders dan bedoeld in 9A012, als hieronder:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A115",
+      "label": "Lanceerinrichtingen, als hieronder:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A116",
+      "label": "Terugkeervoertuigen, geschikt voor gebruik in “raketten”, en apparatuur, speciaal ontworpen of aangepast daarvoor, als hieronder:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A117",
+      "label": "Systemen voor het scheiden of afwerpen van rakettrappen en verbindingsstukken tussen rakettrappen, geschikt voor gebruik in “raketten”.",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A118",
+      "label": "Apparaten voor het regelen van de verbranding van stuwstof voor motoren, geschikt voor gebruik in “raketten” of onbemande luchtvaartuigen, genoemd in 9A012 of 9A112.a., als bedoeld in 9A011 of 9A111.",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A119",
+      "label": "Afzonderlijke rakettrappen, geschikt voor gebruik in volledige raketsystemen of onbemande luchtvaartuigen, met een bereik van 300 km, anders dan bedoeld in 9A005, 9A007, 9A009, 9A105, 9A107 en 9A109.",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A120",
+      "label": "Tanks voor vloeibare stuwstof of gel-stuwstof (‹gel propellant›), anders dan vermeld onder 9A006, speciaal ontworpen voor de onder 1C111 vermelde stuwstoffen of ‘andere vloeibare stuwstoffen of gel-stuwstoffen (‹gel propellant›)’ die worden gebruikt in raketsystemen die een nuttige last van ten minste 500 kg kunnen vervoeren over een afstand van ten minste 300 km.",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A121",
+      "label": "Afwerpbare aansluitingen en verbindingsstukken voor elektrische connectoren, speciaal ontworpen voor “raketten”, ruimtelanceervoertuigen bedoeld in 9A004 of sonderingsraketten, bedoeld in 9A104.",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9A350",
+      "label": "Spuit- of vernevelsystemen, speciaal ontworpen of aangepast voor bevestiging aan vliegtuigen, “lichter-dan-luchttoestellen” of onbemande luchtvaartuigen, en speciaal daarvoor ontworpen onderdelen, als hieronder:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 0
+    },
+    {
+      "code": "9B001",
+      "label": "Fabricageapparatuur, gereedschappen of klemmen, als hieronder:",
+      "category": "9",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "9B002",
+      "label": "Gekoppelde (onvertraagde (‹real time›)) regelsystemen, instrumentatie (met inbegrip van sensoren) of geautomatiseerde apparatuur voor het verzamelen en verwerken van gegevens, met alle volgende eigenschappen:",
+      "category": "9",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "9B003",
+      "label": "Apparatuur, speciaal ontworpen voor de “productie” of het testen van borstelafsluitingen voor gasturbinemotoren, ontworpen om te werken bij een vleugeltipsnelheid groter dan 335 m/s en temperaturen boven 773 K (500 °C), en speciaal ontworpen onderdelen of toebehoren daarvoor.",
+      "category": "9",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "9B004",
+      "label": "Gereedschappen, stempels of klemmen voor het maken van vaste-faseverbindingen van bladen voor gasturbinemotoren waarbij het aerodynamische vlak doorloopt tot aan de schijf, uit “superlegeringen”, titaan of intermetallieke materialen, als omschreven in 9E003.a.3. of 9E003.a.6.",
+      "category": "9",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "9B005",
+      "label": "Gekoppelde (onvertraagde (‹real time›)) regelsystemen, instrumentatie (met inbegrip van sensoren) en geautomatiseerde apparatuur voor het verzamelen en verwerken van gegevens, speciaal ontworpen voor gebruik met:",
+      "category": "9",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "9B006",
+      "label": "Apparatuur voor het testen door middel van akoestische trillingen, geschikt voor het voortbrengen van een geluidsdrukniveau van 160 dB of meer (referentiestandaard: 20 μPa) met een gespecificeerd uitgangsvermogen van 4 kW of meer bij een temperatuur van de testruimte hoger dan 1 273  K (1 000  °C), en speciaal daarvoor ontworpen kwarts-verwarmingselementen.",
+      "category": "9",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "9B007",
+      "label": "Apparatuur, speciaal ontworpen voor het inspecteren van raketmotoren op de afwezigheid van defecten met gebruikmaking van technieken die het materiaal niet beschadigen (NDT-technieken), anders dan analyse door middel van röntgenstraling in een vlak of elementaire fysische of chemische analyse.",
+      "category": "9",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "9B008",
+      "label": "Omzetters voor het direct meten van de oppervlaktewrijving, speciaal ontworpen voor gebruik bij een teststroming op een totale temperatuur (stagnatietemperatuur) van meer dan 833 K (560 °C).",
+      "category": "9",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "9B009",
+      "label": "Gereedschappen, speciaal ontworpen voor de “productie”, door middel van poedermetallurgie, van rotoronderdelen voor gasturbinemotoren, met alle volgende eigenschappen:",
+      "category": "9",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "9B010",
+      "label": "Apparatuur, speciaal ontworpen voor de “productie” van producten, bedoeld in 9A012.",
+      "category": "9",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "9B105",
+      "label": "Aerodynamische testfaciliteiten voor snelheden van Mach 0,9 of meer, geschikt voor ‘raketten’ en subsystemen daarvan.",
+      "category": "9",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "9B106",
+      "label": "Klimaatkamers en echovrije kamers, als hieronder:",
+      "category": "9",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "9B107",
+      "label": "Aerodynamische testfaciliteiten, geschikt voor ‘raketten’, ‘raket’-voortstuwingssystemen en terugkeervoertuigen en -apparatuur zoals vermeld in 9A116, met één of meer van de volgende eigenschappen:",
+      "category": "9",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "9B115",
+      "label": "Speciaal ontworpen “productieapparatuur” voor de systemen, subsystemen en onderdelen bedoeld in 9A005 tot en met 9A009, 9A011, 9A101, 9A102, 9A105 tot en met 9A109, 9A111, 9A116 tot en met 9A120.",
+      "category": "9",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "9B116",
+      "label": "Speciaal ontworpen “productiefaciliteiten” voor de ruimtelanceervoertuigen, bedoeld in 9A004, of systemen, subsystemen en onderdelen bedoeld in 9A005 tot en met 9A009, 9A011, 9A101, 9A102, 9A104 tot en met 9A109, 9A111, 9A116 tot en met 9A120 of ‘raketten’.",
+      "category": "9",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "9B117",
+      "label": "Testbanken of testopstellingen voor het testen van raketten of raketmotoren met vaste of vloeibare stuwstof, met een van de twee hiernavolgende eigenschappen:",
+      "category": "9",
+      "subgroup": "B",
+      "depth": 0
+    },
+    {
+      "code": "9C108",
+      "label": "Los isolatiemateriaal en “binnenbekleding”, anders dan bedoeld in 9A008, voor raketmotoromhullingen die geschikt zijn voor gebruik in “raketten” of speciaal zijn ontworpen voor in 9A007 of 9A107 bedoelde raketmotoren voor vaste stuwstof.",
+      "category": "9",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "9C110",
+      "label": "Met hars geïmpregneerde vezels (‹prepregs›) en met metaal beklede vezels (‹preforms›) daarvoor, voor composiete structuren, laminaten en daarvan vervaardigde producten als bedoeld in 9A110, met een organische of metaalmatrix versterkt met stapel- of continuvezels met een “specifieke treksterkte” van meer dan 7,62 × 104 m en een “specifieke modulus” van meer dan 3,18 × 106 m.",
+      "category": "9",
+      "subgroup": "C",
+      "depth": 0
+    },
+    {
+      "code": "9D001",
+      "label": "“Programmatuur”, m.u.v. die bedoeld wordt in 9D003 of 9D004, die speciaal ontworpen of gewijzigd is voor de “ontwikkeling” van apparatuur of “technologie”, bedoeld in 9A001 tot en met 9A119, 9B of 9E003.",
+      "category": "9",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "9D002",
+      "label": "“Programmatuur”, m.u.v. die bedoeld wordt in 9D003 of 9D004, die speciaal ontworpen of gewijzigd is voor de “productie” van apparatuur, bedoeld in 9A001 tot en met 9A119 of 9B.",
+      "category": "9",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "9D003",
+      "label": "“Programmatuur” met “technologie”, bedoeld in 9E003.h., en die wordt gebruikt in “FADEC-systemen” voor systemen bedoeld in 9A, of apparatuur, bedoeld in 9B.",
+      "category": "9",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "9D004",
+      "label": "Overige “programmatuur”, als hieronder:",
+      "category": "9",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "9D005",
+      "label": "“Programmatuur” die speciaal ontworpen of gewijzigd is voor de werking van apparatuur, bedoeld in 9A004.e. of 9A004.f.",
+      "category": "9",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "9D101",
+      "label": "Speciaal ontworpen of aangepaste “programmatuur” voor het “gebruik” van goederen, bedoeld in 9B105, 9B106, 9B107, 9B116 of 9B117.",
+      "category": "9",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "9D103",
+      "label": "Speciaal ontworpen “programmatuur” voor het modelleren, het simuleren of de ontwerpintegratie van de ruimtelanceervoertuigen, bedoeld in 9A004, sonderingsraketten, bedoeld in 9A104, of “raketten” of de subsystemen, bedoeld in 9A005, 9A007, 9A105, 9A106.c., 9A107, 9A108.c., 9A116 of 9A119.",
+      "category": "9",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "9D104",
+      "label": "“Programmatuur”, als hieronder:",
+      "category": "9",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "9D105",
+      "label": "“Programmatuur”, speciaal ontworpen of aangepast voor de coördinatie van de functies van meer dan één subsysteem, anders dan bedoeld in 9D004.e., in ruimtelanceervoertuigen, bedoeld in 9A004, of sonderingsraketten, bedoeld in 9A104, of ‘raketten’.",
+      "category": "9",
+      "subgroup": "D",
+      "depth": 0
+    },
+    {
+      "code": "9E001",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot betreffende de “ontwikkeling” van apparatuur of “programmatuur”, bedoeld in 9A004 tot en met 9A012, 9A350, 9B of 9D.",
+      "category": "9",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "9E002",
+      "label": "“Technologie” volgens de algemene technologienoot voor de “productie” van apparatuur, bedoeld in 9A004 tot en met 9A011, 9A350 of 9B.",
+      "category": "9",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "9E003",
+      "label": "Andere “technologie”, als hieronder:",
+      "category": "9",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "9E101",
+      "label": "“Technologie”, als hieronder:",
+      "category": "9",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "9E102",
+      "label": "“Technologie” overeenkomstig de algemene technologienoot voor het “gebruik” van ruimtelanceervoertuigen bedoeld in 9A004, goederen bedoeld in 9A005 tot en met 9A011, ‘onbemande luchtvaartuigen’ bedoeld in 9A012, of goederen bedoeld in 9A101, 9A102, 9A104 tot en met 9A111, 9A112.a., 9A115 tot en met 9A121, 9B105, 9B106, 9B107, 9B115, 9B116, 9B117, 9D101 of 9D103.",
+      "category": "9",
+      "subgroup": "E",
+      "depth": 0
+    },
+    {
+      "code": "1C450.a.1",
+      "label": "Amiton: O,O-diethyl-S-[2-(diëthylamino)ethyl]fosforothioaat (78-53-5) en de overeenkomstige gealkyleerde of geprotoneerde zouten.",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 2
+    },
+    {
+      "code": "1C450.a.2",
+      "label": "PFIB: 1,1,3,3,3-pentafluor-2-(trifluormethyl)-1-propeen (382-21-8).",
+      "category": "1",
+      "subgroup": "C",
+      "depth": 2
+    },
+    {
+      "code": "9A009.a",
+      "label": "Hybride raketvoortstuwingssystemen met een totaal impulsvermogen groter dan 1,1 MNs.",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 1
+    },
+    {
+      "code": "6A001.a.1.b",
+      "label": "Systemen voor de opsporing of plaatsbepaling van objecten, met één of meer van de volgende eigenschappen:",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 3
+    },
+    {
+      "code": "6A001.a.2.a.2",
+      "label": "Hydrofoons … Met ingebouwde …",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 4
+    },
+    {
+      "code": "6A001.a.2.a.3",
+      "label": "Hydrofoons … Met een of meer …",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 4
+    },
+    {
+      "code": "6A001.a.2.a.6",
+      "label": "Hydrofoons … Ontworpen voor …",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 4
+    },
+    {
+      "code": "6A001.a.2.b",
+      "label": "‹Towed acoustic hydrophone arrays› …",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 3
+    },
+    {
+      "code": "6A001.a.2.c",
+      "label": "Verwerkingsapparatuur, speciaal ontworpen voor „realtimegebruik” met „towed acoustic hydrophone arrays”, met „toegankelijkheid van het programma voor de gebruiker” en verwerking en correlatie van tijd- of frequentiedomeinen, met inbegrip van spectrumanalyse, digitale filtering en bundelvorming met toepassing van snelle Fouriertransformatie („Fast Fourier transform”) of andere herleidingen of processen;",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 3
+    },
+    {
+      "code": "6A001.a.2.e",
+      "label": "Bodemkabelsystemen hydrofoon-„arrays” met één van de volgende eigenschappen:",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 3
+    },
+    {
+      "code": "6A001.a.2.f",
+      "label": "Verwerkingsapparatuur, speciaal ontworpen voor „realtime”gebruik met bodemkabelsystemen, met „toegankelijkheid van het programma voor de gebruiker” en verwerking en correlatie van tijd- of frequentiedomeinen, met inbegrip van spectrumanalyse, digitale filtering en bundelvorming met toepassing van snelle Fouriertransformatie of andere herleidingen of processen;",
+      "category": "6",
+      "subgroup": "A",
+      "depth": 3
+    },
+    {
+      "code": "6D003.a",
+      "label": "„Programmatuur”, voor de „onvertraagde verwerking” van akoestische gegevens;",
+      "category": "6",
+      "subgroup": "D",
+      "depth": 1
+    },
+    {
+      "code": "8A002.o.3",
+      "label": "Geluiddempingssystemen voor gebruik in schepen met een waterverplaatsing van 1 000  ton of meer, als hieronder:",
+      "category": "8",
+      "subgroup": "A",
+      "depth": 2
+    },
+    {
+      "code": "8E002.a",
+      "label": "„Technologie” voor de „ontwikkeling”, de „productie”, het herstel, de revisie of het opknappen (opnieuw machinaal bewerken) van schroeven die speciaal zijn ontworpen om onderwatergeluid te beperken.",
+      "category": "8",
+      "subgroup": "E",
+      "depth": 1
+    },
+    {
+      "code": "5A004.a",
+      "label": "Apparatuur ontworpen of aangepast voor het uitvoeren van „cryptoanalytische functies”.",
+      "category": "5",
+      "subgroup": "A",
+      "depth": 1
+    },
+    {
+      "code": "5D002.a",
+      "label": "„Programmatuur” speciaal ontworpen of aangepast voor de „ontwikkeling”, de „productie” of het „gebruik” van:",
+      "category": "5",
+      "subgroup": "D",
+      "depth": 1
+    },
+    {
+      "code": "5D002.c",
+      "label": "„Programmatuur” die de kenmerken heeft of de functies uitoefent of simuleert van:",
+      "category": "5",
+      "subgroup": "D",
+      "depth": 1
+    },
+    {
+      "code": "5E002.a",
+      "label": "Uitsluitend „technologie” voor de „ontwikkeling”, de „productie” of het „gebruik” van de hierboven in 5A004.a., 5D002.a.3. of 5D002.c.3. bedoelde goederen.",
+      "category": "5",
+      "subgroup": "E",
+      "depth": 1
+    },
+    {
+      "code": "9A007.a",
+      "label": "Raketvoortstuwingssystemen met vaste brandstof die bruikbaar zijn in ruimtelanceervoertuigen, bedoeld in 9A004 hierboven, of sonderingsraketten, bedoeld in 9A104 hierna , met één of meer van de volgende eigenschappen:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 1
+    },
+    {
+      "code": "9A008.d",
+      "label": "Onderdelen, als hieronder, speciaal ontworpen voor raketvoortstuwingssystemen met vaste stuwstof:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 1
+    },
+    {
+      "code": "9A105.a",
+      "label": "Raketmotoren voor vloeibare stuwstof, als hieronder:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 1
+    },
+    {
+      "code": "9A106.c",
+      "label": "Systemen of onderdelen, andere dan bedoeld in 9A006, bruikbaar in „raketten” , als hieronder, speciaal ontworpen voor raketvoortstuwingssystemen met vloeibare stuwstof:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 1
+    },
+    {
+      "code": "9A108.c",
+      "label": "Onderdelen, andere dan bedoeld in 9A008, bruikbaar in „raketten”, als hieronder , speciaal ontworpen voor raketvoortstuwingssystemen met vaste brandstof:",
+      "category": "9",
+      "subgroup": "A",
+      "depth": 1
+    }
+  ]
+}

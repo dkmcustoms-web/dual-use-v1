@@ -213,7 +213,120 @@ if load_clicked:
 st.divider()
 
 # ----------------------------------------------------------------------
-# Section 2: Upload Dutch (or other language) regulation text
+# Section 2: Load BUNDLED Dutch Annex I (no upload needed)
+# ----------------------------------------------------------------------
+st.subheader("🇳🇱 Import bundled Dutch Annex I (2025-11)")
+st.caption(
+    "Pre-parsed JSON of the consolidated Dutch text "
+    "(EUR-Lex 02021R0821-NL-15.11.2025, 407 entries). "
+    "Lives in `data/annex_i_nl_2025-11.json` in the repo — no upload required. "
+    "Loaded into `manual_entries` and searchable from the **Search product** page."
+)
+
+bundled_path = _ROOT / "data" / "annex_i_nl_2025-11.json"
+if not bundled_path.exists():
+    st.warning(f"Bundled file not found at {bundled_path}.")
+else:
+    if st.button(
+        "📦 Import bundled NL Annex I (2025-11) into database",
+        type="primary",
+        use_container_width=True,
+        key="import_bundled_nl_btn",
+    ):
+        progress = st.progress(0, text="Reading bundled JSON...")
+        status = st.empty()
+        try:
+            data = json.loads(bundled_path.read_text(encoding="utf-8"))
+            meta = data.get("metadata", {})
+            entries = data.get("entries", [])
+            progress.progress(30, text=f"Read {len(entries)} entries.")
+            status.info(
+                f"📖 Bundled JSON: {meta.get('source')} — "
+                f"v{meta.get('version')} — {len(entries)} entries."
+            )
+
+            version_str = f"{meta.get('version', '2025-11')}_nl_bundled"
+            existing = run_query(
+                "SELECT id FROM data_sources WHERE source_type='annex_i_text' AND version=:v",
+                {"v": version_str},
+            )
+            if existing:
+                source_id = existing[0]["id"]
+                execute("DELETE FROM manual_entries WHERE source_id=:sid", {"sid": source_id})
+                execute(
+                    "UPDATE data_sources SET row_count=:rc WHERE id=:sid",
+                    {"rc": len(entries), "sid": source_id},
+                )
+                status.info(f"♻️ Replacing rows of existing source #{source_id}.")
+            else:
+                inserted = run_query(
+                    """
+                    INSERT INTO data_sources (source_type, source_name, version, row_count, notes)
+                    VALUES ('annex_i_text', :n, :v, :rc, :notes)
+                    RETURNING id
+                    """,
+                    {
+                        "n": f"EU Annex I (NL) — {meta.get('version', '2025-11')} bundled",
+                        "v": version_str,
+                        "rc": len(entries),
+                        "notes": "Loaded from bundled JSON in repo (data/annex_i_nl_2025-11.json).",
+                    },
+                )
+                source_id = inserted[0]["id"]
+
+            progress.progress(60, text=f"Inserting {len(entries)} rows...")
+            from psycopg2.extras import execute_values
+            from db.connection import get_engine
+            batch = []
+            for e in entries:
+                payload = {
+                    "code": e.get("code"),
+                    "label": e.get("label"),
+                    "category": e.get("category"),
+                    "subgroup": e.get("subgroup"),
+                    "depth": e.get("depth"),
+                    "language": "NL",
+                    "regulation_version": meta.get("version"),
+                    "source": "bundled",
+                }
+                batch.append({
+                    "source_id": source_id,
+                    "entry_key": e.get("code"),
+                    "entry_label": e.get("label"),
+                    "payload": json.dumps(payload, default=str),
+                })
+            t0 = time.time()
+            engine = get_engine()
+            with engine.begin() as conn:
+                raw_conn = conn.connection
+                cur = raw_conn.cursor()
+                execute_values(
+                    cur,
+                    "INSERT INTO manual_entries (source_id, entry_key, entry_label, payload) VALUES %s",
+                    batch,
+                    template="(%(source_id)s, %(entry_key)s, %(entry_label)s, %(payload)s::jsonb)",
+                    page_size=500,
+                )
+                cur.close()
+            elapsed = time.time() - t0
+
+            progress.progress(100, text="Done.")
+            status.success(
+                f"✓ Imported {len(batch)} NL entries in {elapsed:.1f}s (source #{source_id})."
+            )
+            time.sleep(1.5)
+            st.rerun()
+        except Exception as exc:
+            progress.empty()
+            status.empty()
+            st.error(f"Import failed: {exc}")
+            st.exception(exc)
+
+
+st.divider()
+
+# ----------------------------------------------------------------------
+# Section 3: Upload Dutch (or other language) regulation text MANUALLY
 # ----------------------------------------------------------------------
 st.subheader("📄 Load regulation text (Dual_use.txt — Dutch / EN / FR / DE)")
 st.caption(
