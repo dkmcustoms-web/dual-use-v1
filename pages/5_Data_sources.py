@@ -285,6 +285,7 @@ else:
                     "category": e.get("category"),
                     "subgroup": e.get("subgroup"),
                     "depth": e.get("depth"),
+                    "full_content": e.get("full_content", ""),  # narrative text for free-text search
                     "language": "NL",
                     "regulation_version": meta.get("version"),
                     "source": "bundled",
@@ -441,6 +442,7 @@ if txt_clicked:
                 "category": e["category"],
                 "subgroup": e["subgroup"],
                 "depth": e["depth"],
+                "full_content": e.get("full_content", ""),
                 "language": txt_language,
                 "regulation_version": txt_version.strip(),
             }

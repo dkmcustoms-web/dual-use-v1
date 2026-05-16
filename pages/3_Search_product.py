@@ -84,18 +84,57 @@ def _render_hit_card(hit: dict, query: str | None = None) -> None:
                 st.caption(f"_(sub-entries unavailable: {exc})_")
 
 
-def _render_manual_hit(row: dict) -> None:
-    """Render a hit from manual_entries (e.g. the Dutch TXT data)."""
+def _render_manual_hit(row: dict, query: str | None = None) -> None:
+    """Render a hit from manual_entries (e.g. the Dutch TXT data).
+
+    If the match was found in `full_content` (not in label), show a snippet
+    around the match so the user sees the context.
+    """
+    payload = row.get("payload") or {}
+    if isinstance(payload, str):
+        try:
+            import json as _json
+            payload = _json.loads(payload)
+        except Exception:
+            payload = {}
+
+    full_content = payload.get("full_content", "") if isinstance(payload, dict) else ""
+    label = row.get("entry_label") or ""
+    snippet = None
+
+    # If query was provided and match is in full_content (not in label), extract a snippet
+    if query:
+        q_low = query.lower()
+        if q_low not in label.lower() and full_content and q_low in full_content.lower():
+            idx = full_content.lower().find(q_low)
+            start = max(0, idx - 80)
+            end = min(len(full_content), idx + len(query) + 200)
+            prefix = "…" if start > 0 else ""
+            suffix = "…" if end < len(full_content) else ""
+            snippet = f"{prefix}{full_content[start:end]}{suffix}"
+
     with st.container(border=True):
         c1, c2 = st.columns([4, 1])
         with c1:
             st.markdown(f"### `{row['entry_key']}`")
             st.caption(f"📚 {row['source_name']} · v{row['version']}")
         with c2:
-            payload = row.get("payload") or {}
             if isinstance(payload, dict) and payload.get("language"):
                 st.markdown(f"🌐 **{payload['language']}**")
-        st.markdown(row.get("entry_label") or "")
+
+        st.markdown(label)
+
+        if snippet:
+            st.caption("**Match in narrative:**")
+            # Highlight the query term in the snippet
+            import re
+            highlighted = re.sub(
+                re.escape(query),
+                lambda m: f"**`{m.group()}`**",
+                snippet,
+                flags=re.IGNORECASE,
+            )
+            st.markdown(f"_{highlighted}_")
 
 
 # ----------------------------------------------------------------------
@@ -207,10 +246,17 @@ if search_clicked and (query.strip() or exact_code.strip()):
             JOIN    data_sources ds ON ds.id = me.source_id
             WHERE   ds.is_active = TRUE
               AND   (
-                    me.entry_label ILIKE :like
-                 OR me.entry_key   ILIKE :like
-                  )
-            ORDER BY me.entry_key
+                       me.entry_label                ILIKE :like
+                    OR me.entry_key                  ILIKE :like
+                    OR me.payload->>'full_content'   ILIKE :like
+                    )
+            ORDER BY
+                CASE
+                    WHEN me.entry_label ILIKE :like THEN 1
+                    WHEN me.entry_key   ILIKE :like THEN 2
+                    ELSE 3
+                END,
+                me.entry_key
             LIMIT 50
             """,
             {"like": f"%{query.strip()}%"},
@@ -218,7 +264,7 @@ if search_clicked and (query.strip() or exact_code.strip()):
         if manual:
             st.subheader(f"📝 Custom / language sources — {len(manual)} hit(s)")
             for m in manual[:20]:
-                _render_manual_hit(m)
+                _render_manual_hit(m, query=query.strip())
             if len(manual) > 20:
                 st.caption(f"…and {len(manual) - 20} more.")
         else:
