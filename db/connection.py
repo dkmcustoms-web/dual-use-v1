@@ -41,11 +41,18 @@ def get_engine() -> Engine:
 
 
 def run_query(sql: str, params: dict | None = None) -> list[dict]:
-    """Execute a SELECT and return list-of-dicts."""
+    """Execute SQL and return list-of-dicts.
+
+    Uses engine.begin() so any data modifications (e.g. INSERT...RETURNING id)
+    are automatically committed. For pure SELECTs the transaction overhead is
+    negligible.
+    """
     engine = get_engine()
-    with engine.connect() as conn:
+    with engine.begin() as conn:
         result = conn.execute(text(sql), params or {})
-        return [dict(row._mapping) for row in result]
+        if result.returns_rows:
+            return [dict(row._mapping) for row in result]
+        return []
 
 
 def execute(sql: str, params: dict | None = None) -> None:
