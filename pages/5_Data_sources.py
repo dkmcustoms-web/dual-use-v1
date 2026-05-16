@@ -9,14 +9,14 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 # ----------------------------------------------------------------------
 
-
 import io
 import json
+import time
 
 import pandas as pd
 import streamlit as st
 
-from db.connection import execute, execute_many, run_query
+from db.connection import execute, run_query, bulk_insert_values
 
 st.set_page_config(page_title="Data sources", page_icon="⚙️", layout="wide")
 st.title("⚙️ Data sources")
@@ -30,19 +30,23 @@ st.caption(
 # Current sources table
 # ----------------------------------------------------------------------
 st.subheader("Currently registered sources")
-rows = run_query(
-    """
-    SELECT  id, source_type, source_name, version, loaded_at,
-            row_count, is_active, notes
-    FROM    data_sources
-    ORDER BY loaded_at DESC
-    """
-)
-if not rows:
-    st.info("No sources loaded yet. Use the upload sections below.")
-else:
-    df = pd.DataFrame(rows)
-    st.dataframe(df, hide_index=True, use_container_width=True)
+try:
+    rows = run_query(
+        """
+        SELECT  id, source_type, source_name, version, loaded_at,
+                row_count, is_active, notes
+        FROM    data_sources
+        ORDER BY loaded_at DESC
+        """
+    )
+    if not rows:
+        st.info("No sources loaded yet. Use the upload sections below.")
+    else:
+        df = pd.DataFrame(rows)
+        st.dataframe(df, hide_index=True, use_container_width=True)
+except Exception as exc:
+    st.error(f"Could not read data_sources: {exc}")
+    st.info("Verify DATABASE_URL is set and `python -m db.init_db` has been run.")
 
 
 st.divider()
@@ -56,33 +60,70 @@ st.caption(
     "**Export Worksheet** sheet — as published by DG TRADE."
 )
 
-excel_file = st.file_uploader("Annex I Excel (.xlsx)", type=["xlsx"], key="annex_upload")
-default_version = st.text_input(
-    "Version label (e.g. '2024-09' or '2025-11')",
-    value="",
-    placeholder="2024-09",
-    key="annex_version",
+col_file, col_version = st.columns([2, 1])
+with col_file:
+    excel_file = st.file_uploader(
+        "Annex I Excel (.xlsx)",
+        type=["xlsx"],
+        key="annex_upload",
+    )
+with col_version:
+    version_label = st.text_input(
+        "Version label",
+        value="",
+        placeholder="2024-09",
+        key="annex_version",
+        help="e.g. '2024-09' or '2025-11'",
+    )
+
+# Button is ALWAYS rendered, just disabled until prerequisites are met.
+ready = (excel_file is not None) and bool(version_label.strip())
+load_clicked = st.button(
+    "🚀 Load Annex I into database" if ready else "Upload a file and enter a version first",
+    type="primary",
+    disabled=not ready,
+    use_container_width=True,
+    key="load_annex_btn",
 )
 
-if excel_file is not None and default_version.strip() and st.button(
-    "Load Annex I into database", type="primary"
-):
+if load_clicked:
+    progress = st.progress(0, text="Reading Excel...")
+    status = st.empty()
     try:
         import openpyxl
-        wb = openpyxl.load_workbook(io.BytesIO(excel_file.read()), data_only=True, read_only=True)
+
+        # Use getvalue() — it does NOT consume the stream like read() does.
+        file_bytes = excel_file.getvalue()
+        wb = openpyxl.load_workbook(
+            io.BytesIO(file_bytes),
+            data_only=True,
+            read_only=True,
+        )
+        if "Export Worksheet" not in wb.sheetnames:
+            st.error(
+                f"Sheet 'Export Worksheet' not found. "
+                f"Available sheets: {wb.sheetnames}"
+            )
+            st.stop()
         ws = wb["Export Worksheet"]
         raw_rows = list(ws.iter_rows(min_row=2, values_only=True))
-        st.write(f"Read {len(raw_rows)} rows from the Excel.")
+        progress.progress(20, text=f"Parsed {len(raw_rows)} rows from Excel.")
+        status.info(f"📖 Read {len(raw_rows):,} rows from {excel_file.name}.")
 
-        # Register source
+        # ---- Register source row ------------------------------------
+        progress.progress(30, text="Registering source...")
+        version_str = version_label.strip()
         existing = run_query(
             "SELECT id FROM data_sources WHERE source_type='annex_i' AND version=:v",
-            {"v": default_version.strip()},
+            {"v": version_str},
         )
         if existing:
             source_id = existing[0]["id"]
-            execute("DELETE FROM annex_i_items WHERE source_id=:sid", {"sid": source_id})
-            st.info(f"Replacing existing rows for source id {source_id}.")
+            execute(
+                "DELETE FROM annex_i_items WHERE source_id=:sid",
+                {"sid": source_id},
+            )
+            status.info(f"♻️ Replacing existing source #{source_id} ({version_str}).")
         else:
             inserted = run_query(
                 """
@@ -91,14 +132,13 @@ if excel_file is not None and default_version.strip() and st.button(
                 RETURNING id
                 """,
                 {
-                    "n": f"EU Annex I Dual-Use ({default_version.strip()})",
-                    "v": default_version.strip(),
+                    "n": f"EU Annex I Dual-Use ({version_str})",
+                    "v": version_str,
                     "rc": len(raw_rows),
                     "notes": f"Uploaded via UI: {excel_file.name}",
                 },
             )
             source_id = inserted[0]["id"]
-            # Deactivate older versions
             execute(
                 """
                 UPDATE data_sources SET is_active = FALSE
@@ -106,8 +146,10 @@ if excel_file is not None and default_version.strip() and st.button(
                 """,
                 {"sid": source_id},
             )
+            status.info(f"✨ Registered new source #{source_id} ({version_str}).")
 
-        # Build batch
+        # ---- Build batch --------------------------------------------
+        progress.progress(50, text="Preparing rows for insert...")
         batch = []
         for r in raw_rows:
             item_id, parent_id, code, label = r
@@ -126,29 +168,45 @@ if excel_file is not None and default_version.strip() and st.button(
                     pid_val = None
             batch.append({
                 "id": int(item_id),
-                "pid": pid_val,
+                "parent_id": pid_val,
                 "code": code_str,
                 "label": str(label) if label is not None else "",
-                "cat": category,
-                "sub": subgroup,
+                "category": category,
+                "subgroup": subgroup,
                 "depth": depth,
-                "sid": source_id,
+                "source_id": source_id,
             })
 
-        with st.spinner(f"Inserting {len(batch)} rows..."):
-            execute_many(
-                """
-                INSERT INTO annex_i_items
-                    (id, parent_id, code, label, category, subgroup, depth, source_id)
-                VALUES
-                    (:id, :pid, :code, :label, :cat, :sub, :depth, :sid)
-                """,
-                batch,
-            )
-        st.success(f"✓ Loaded {len(batch)} Annex I rows (version {default_version}).")
+        # ---- Fast bulk insert via psycopg2.execute_values -----------
+        progress.progress(70, text=f"Inserting {len(batch):,} rows into Postgres...")
+        t0 = time.time()
+        bulk_insert_values(
+            table="annex_i_items",
+            columns=["id", "parent_id", "code", "label",
+                     "category", "subgroup", "depth", "source_id"],
+            rows=batch,
+            page_size=500,
+        )
+        elapsed = time.time() - t0
+
+        execute(
+            "UPDATE data_sources SET row_count = :rc WHERE id = :sid",
+            {"rc": len(batch), "sid": source_id},
+        )
+
+        progress.progress(100, text="Done.")
+        status.success(
+            f"✓ Loaded {len(batch):,} Annex I rows in {elapsed:.1f}s "
+            f"(source #{source_id}, version {version_str})."
+        )
+        time.sleep(1.5)
         st.rerun()
+
     except Exception as exc:
+        progress.empty()
+        status.empty()
         st.error(f"Load failed: {exc}")
+        st.exception(exc)
 
 
 st.divider()
@@ -171,7 +229,7 @@ with st.form("custom_source_form"):
     with c1:
         source_type = st.text_input(
             "Source type",
-            placeholder="country_risk, cn_eccn_map, compliance_note, ...",
+            placeholder="country_risk, cn_eccn_map, ...",
         )
     with c2:
         source_name = st.text_input("Source name", placeholder="My BE country risk list")
@@ -186,9 +244,8 @@ with st.form("custom_source_form"):
     label_column = st.text_input(
         "Label column (optional)",
         placeholder="e.g. 'description'",
-        help="Optional. Becomes `entry_label`. Falls back to key value if empty.",
     )
-    notes = st.text_area("Notes (optional)", placeholder="Where this comes from, who curated it.")
+    notes = st.text_area("Notes (optional)")
     submitted = st.form_submit_button("Load custom source", type="primary")
 
 if submitted:
@@ -200,7 +257,7 @@ if submitted:
         st.stop()
 
     try:
-        raw = custom_file.read()
+        raw = custom_file.getvalue()
         if custom_file.name.lower().endswith(".csv"):
             df = pd.read_csv(io.BytesIO(raw))
         else:
@@ -213,7 +270,6 @@ if submitted:
         st.write(f"Loaded {len(df)} rows. Sample:")
         st.dataframe(df.head(5), use_container_width=True)
 
-        # Register
         inserted = run_query(
             """
             INSERT INTO data_sources (source_type, source_name, version, row_count, notes)
@@ -228,25 +284,41 @@ if submitted:
         batch = []
         for _, row in df.iterrows():
             key_val = str(row[key_column])
-            label_val = str(row[label_column]) if label_column and label_column in df.columns else key_val
+            label_val = (
+                str(row[label_column])
+                if label_column and label_column in df.columns
+                else key_val
+            )
             batch.append({
-                "sid": source_id,
-                "key": key_val,
-                "label": label_val,
+                "source_id": source_id,
+                "entry_key": key_val,
+                "entry_label": label_val,
                 "payload": json.dumps(row.to_dict(), default=str),
             })
 
-        execute_many(
-            """
-            INSERT INTO manual_entries (source_id, entry_key, entry_label, payload)
-            VALUES (:sid, :key, :label, CAST(:payload AS JSONB))
-            """,
-            batch,
-        )
+        # JSONB cast via SQL template
+        from psycopg2.extras import execute_values
+        from db.connection import get_engine
+        engine = get_engine()
+        with engine.begin() as conn:
+            raw_conn = conn.connection
+            cur = raw_conn.cursor()
+            execute_values(
+                cur,
+                "INSERT INTO manual_entries (source_id, entry_key, entry_label, payload) "
+                "VALUES %s",
+                batch,
+                template="(%(source_id)s, %(entry_key)s, %(entry_label)s, %(payload)s::jsonb)",
+                page_size=500,
+            )
+            cur.close()
+
         st.success(f"✓ Loaded {len(batch)} rows from {custom_file.name} as source #{source_id}.")
+        time.sleep(1.5)
         st.rerun()
     except Exception as exc:
         st.error(f"Load failed: {exc}")
+        st.exception(exc)
 
 
 st.divider()
@@ -255,9 +327,15 @@ st.divider()
 # Section 3: Deactivate / delete a source
 # ----------------------------------------------------------------------
 st.subheader("🗑️ Manage existing sources")
-sources = run_query("SELECT id, source_type, source_name, version, is_active FROM data_sources ORDER BY loaded_at DESC")
+sources = run_query(
+    "SELECT id, source_type, source_name, version, is_active "
+    "FROM data_sources ORDER BY loaded_at DESC"
+)
 if sources:
-    options = {f"#{s['id']} — {s['source_name']} ({s['version']}) — active={s['is_active']}": s["id"] for s in sources}
+    options = {
+        f"#{s['id']} — {s['source_name']} ({s['version']}) — active={s['is_active']}": s["id"]
+        for s in sources
+    }
     chosen = st.selectbox("Pick a source", list(options.keys()))
     c1, c2 = st.columns(2)
     with c1:
@@ -269,6 +347,13 @@ if sources:
             st.rerun()
     with c2:
         confirm = st.checkbox("I confirm deletion", value=False)
-        if st.button("Delete source (and its rows)", use_container_width=True, disabled=not confirm):
-            execute("DELETE FROM data_sources WHERE id = :sid", {"sid": options[chosen]})
+        if st.button(
+            "Delete source (and its rows)",
+            use_container_width=True,
+            disabled=not confirm,
+        ):
+            execute(
+                "DELETE FROM data_sources WHERE id = :sid",
+                {"sid": options[chosen]},
+            )
             st.rerun()

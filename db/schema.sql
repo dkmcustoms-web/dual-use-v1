@@ -3,6 +3,14 @@
 
 
 -- =====================================================================
+-- EXTENSIONS — must come first because indices below depend on pg_trgm.
+-- pg_trgm provides the trigram-similarity operators/functions used by
+-- the fuzzy search on annex_i_items.label.
+-- =====================================================================
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
+
+-- =====================================================================
 -- DATA SOURCES — registry of every dataset loaded into the sandbox.
 -- Every screening references a specific source version for audit trail.
 -- =====================================================================
@@ -41,13 +49,9 @@ CREATE TABLE IF NOT EXISTS annex_i_items (
 CREATE INDEX IF NOT EXISTS idx_annex_code        ON annex_i_items (code, source_id);
 CREATE INDEX IF NOT EXISTS idx_annex_parent      ON annex_i_items (parent_id, source_id);
 CREATE INDEX IF NOT EXISTS idx_annex_category    ON annex_i_items (category, subgroup, source_id);
--- Full-text on label for product search
+-- Trigram index for fuzzy search on labels (uses pg_trgm extension created above)
 CREATE INDEX IF NOT EXISTS idx_annex_label_trgm  ON annex_i_items
     USING gin (label gin_trgm_ops);
-
--- pg_trgm extension is needed for the trigram index above.
--- Run once per database; safe to repeat.
-CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
 
 -- =====================================================================

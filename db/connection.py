@@ -56,9 +56,49 @@ def execute(sql: str, params: dict | None = None) -> None:
 
 
 def execute_many(sql: str, rows: list[dict]) -> None:
-    """Batch insert/update."""
+    """Batch insert/update.
+
+    Note: this uses SQLAlchemy's standard executemany which on psycopg2
+    becomes one round-trip *per row*. Slow over network. For large inserts
+    use `bulk_insert_values()` instead.
+    """
     if not rows:
         return
     engine = get_engine()
     with engine.begin() as conn:
         conn.execute(text(sql), rows)
+
+
+def bulk_insert_values(table: str, columns: list[str], rows: list[dict],
+                       page_size: int = 500) -> None:
+    """Fast bulk insert using psycopg2's execute_values.
+
+    Sends rows in chunks of `page_size` as a single multi-row INSERT each,
+    which is ~100x faster than executemany over Neon. Typical 2.5k rows
+    insert in <5 seconds even on the free tier.
+
+    Args:
+        table:    target table name
+        columns:  column names in insert order
+        rows:     list of dicts; each must have all `columns` as keys
+    """
+    if not rows:
+        return
+    from psycopg2.extras import execute_values
+
+    cols_sql = ", ".join(columns)
+    template = "(" + ", ".join(f"%({c})s" for c in columns) + ")"
+    insert_sql = f"INSERT INTO {table} ({cols_sql}) VALUES %s"
+
+    engine = get_engine()
+    with engine.begin() as conn:
+        raw_conn = conn.connection
+        cur = raw_conn.cursor()
+        execute_values(
+            cur,
+            insert_sql,
+            rows,
+            template=template,
+            page_size=page_size,
+        )
+        cur.close()

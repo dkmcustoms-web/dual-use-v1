@@ -16,7 +16,7 @@ import openpyxl
 # Make the project root importable when running as a script
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from db.connection import execute, execute_many, run_query  # noqa: E402
+from db.connection import bulk_insert_values, execute, run_query  # noqa: E402
 
 
 def load(excel_path: str, version_label: str | None = None) -> None:
@@ -68,27 +68,18 @@ def load(excel_path: str, version_label: str | None = None) -> None:
             {"sid": source_id},
         )
 
-    # Bulk insert
-    insert_sql = """
-        INSERT INTO annex_i_items
-            (id, parent_id, code, label, category, subgroup, depth, source_id)
-        VALUES
-            (:id, :pid, :code, :label, :cat, :sub, :depth, :sid)
-    """
+    # Build all rows first, then bulk-insert
     batch: list[dict] = []
     for r in rows:
         item_id, parent_id, code, label = r
         if item_id is None or code is None:
             continue
         code_str = str(code).strip()
-        # Category = first character if it's a digit
         category = code_str[0] if code_str and code_str[0].isdigit() else None
-        # Subgroup = second character if it's A-E (and we have a category digit)
         subgroup = None
         if category and len(code_str) >= 2 and code_str[1] in "ABCDE":
             subgroup = code_str[1]
         depth = code_str.count(".")
-        # parent_id may be an empty string in some rows — normalize to None
         if parent_id in ("", None):
             pid_val: int | None = None
         else:
@@ -99,23 +90,32 @@ def load(excel_path: str, version_label: str | None = None) -> None:
 
         batch.append({
             "id": int(item_id),
-            "pid": pid_val,
+            "parent_id": pid_val,
             "code": code_str,
             "label": str(label) if label is not None else "",
-            "cat": category,
-            "sub": subgroup,
+            "category": category,
+            "subgroup": subgroup,
             "depth": depth,
-            "sid": source_id,
+            "source_id": source_id,
         })
 
-        if len(batch) >= 500:
-            execute_many(insert_sql, batch)
-            batch.clear()
+    print(f"Inserting {len(batch)} rows via bulk insert...")
+    bulk_insert_values(
+        table="annex_i_items",
+        columns=["id", "parent_id", "code", "label",
+                 "category", "subgroup", "depth", "source_id"],
+        rows=batch,
+        page_size=500,
+    )
 
-    if batch:
-        execute_many(insert_sql, batch)
+    # Sync row_count (in case some rows were skipped)
+    execute(
+        "UPDATE data_sources SET row_count = :rc WHERE id = :sid",
+        {"rc": len(batch), "sid": source_id},
+    )
 
-    print(f"✓ Loaded {len(rows)} rows into annex_i_items (source_id={source_id}, version={version_label}).")
+    print(f"✓ Loaded {len(batch)} rows into annex_i_items "
+          f"(source_id={source_id}, version={version_label}).")
 
 
 if __name__ == "__main__":
