@@ -22,7 +22,12 @@ def get_active_annex_source() -> dict | None:
 def search_labels(query: str, limit: int = 50) -> list[dict]:
     """Trigram-similarity search on labels — returns rows ordered by similarity.
 
-    Requires the pg_trgm extension (created by schema.sql).
+    Uses the similarity() function with a threshold (0.1) instead of the `%`
+    operator, because escaping `%` correctly in SQLAlchemy text() with named
+    parameters is unreliable across drivers. similarity() avoids all that.
+
+    The pg_trgm GIN index is bypassed for this style of query, but at 2.6k
+    rows that's still sub-millisecond.
     """
     source = get_active_annex_source()
     if not source:
@@ -37,7 +42,7 @@ def search_labels(query: str, limit: int = 50) -> list[dict]:
                 similarity(label, :q) AS score
         FROM    annex_i_items
         WHERE   source_id = :sid
-          AND   label %% :q                              -- trigram match operator
+          AND   similarity(label, :q) > 0.05
         ORDER BY similarity(label, :q) DESC, depth ASC
         LIMIT   :limit
         """,

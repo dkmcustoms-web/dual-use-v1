@@ -113,3 +113,40 @@ CREATE TABLE IF NOT EXISTS screening_hits (
 
 CREATE INDEX IF NOT EXISTS idx_hits_screening ON screening_hits (screening_id);
 CREATE INDEX IF NOT EXISTS idx_hits_type      ON screening_hits (hit_type);
+
+
+-- =====================================================================
+-- COMPLIANCE PROMPTS — system prompts for the LLM-based review feature.
+-- Editable via the Data Sources page so the user can iterate on the
+-- prompt without touching code. Multiple versions can coexist, but
+-- only one is "active" at any moment.
+-- =====================================================================
+CREATE TABLE IF NOT EXISTS compliance_prompts (
+    id              SERIAL PRIMARY KEY,
+    name            VARCHAR(200) NOT NULL,
+    version         VARCHAR(50) NOT NULL,
+    system_prompt   TEXT NOT NULL,
+    model           VARCHAR(100) NOT NULL DEFAULT 'claude-sonnet-4-6',
+    temperature     NUMERIC(3, 2) NOT NULL DEFAULT 0.0,
+    max_tokens      INTEGER NOT NULL DEFAULT 4000,
+    is_active       BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    notes           TEXT,
+    UNIQUE (name, version)
+);
+
+CREATE INDEX IF NOT EXISTS idx_prompts_active
+    ON compliance_prompts (is_active, created_at DESC);
+
+
+-- =====================================================================
+-- SCREENINGS — extend with LLM review columns (safe to re-run).
+-- =====================================================================
+ALTER TABLE screenings
+    ADD COLUMN IF NOT EXISTS prompt_id           INTEGER REFERENCES compliance_prompts (id),
+    ADD COLUMN IF NOT EXISTS llm_model           VARCHAR(100),
+    ADD COLUMN IF NOT EXISTS llm_raw_response    TEXT,
+    ADD COLUMN IF NOT EXISTS llm_input_tokens    INTEGER,
+    ADD COLUMN IF NOT EXISTS llm_output_tokens   INTEGER,
+    ADD COLUMN IF NOT EXISTS llm_risk_level      VARCHAR(20),
+    ADD COLUMN IF NOT EXISTS llm_recommendation  VARCHAR(100);

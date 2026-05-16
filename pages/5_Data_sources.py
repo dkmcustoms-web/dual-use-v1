@@ -70,10 +70,11 @@ with col_file:
 with col_version:
     version_label = st.text_input(
         "Version label",
-        value="",
+        value="2024-09",
         placeholder="2024-09",
         key="annex_version",
-        help="e.g. '2024-09' or '2025-11'",
+        help="The DG TRADE Excel currently available is the September 2024 version. "
+             "Change this when you load a newer version.",
     )
 
 # Button is ALWAYS rendered, just disabled until prerequisites are met.
@@ -212,7 +213,166 @@ if load_clicked:
 st.divider()
 
 # ----------------------------------------------------------------------
-# Section 2: Upload generic CSV/JSON to manual_entries
+# Section 2: Upload Dutch (or other language) regulation text
+# ----------------------------------------------------------------------
+st.subheader("📄 Load regulation text (Dual_use.txt — Dutch / EN / FR / DE)")
+st.caption(
+    "Plaintext export of the consolidated EU regulation from EUR-Lex. "
+    "Extracts ECN code → first-line label pairs and stores them as "
+    "`manual_entries` with source_type `annex_i_text`. "
+    "Searchable from the **Search product** page alongside the structured Excel."
+)
+
+col_txt, col_lang, col_ver = st.columns([2, 1, 1])
+with col_txt:
+    txt_file = st.file_uploader(
+        "Regulation text file (.txt)",
+        type=["txt"],
+        key="regulation_txt_upload",
+    )
+with col_lang:
+    txt_language = st.selectbox(
+        "Language",
+        options=["NL", "EN", "FR", "DE", "other"],
+        index=0,
+        key="regulation_txt_lang",
+    )
+with col_ver:
+    txt_version = st.text_input(
+        "Version",
+        value="2025-11",
+        placeholder="2025-11",
+        key="regulation_txt_version",
+    )
+
+txt_ready = (txt_file is not None) and bool(txt_version.strip())
+txt_clicked = st.button(
+    "🚀 Parse and load regulation text" if txt_ready
+    else "Upload a .txt and enter a version first",
+    type="primary",
+    disabled=not txt_ready,
+    use_container_width=True,
+    key="load_txt_btn",
+)
+
+if txt_clicked:
+    progress = st.progress(0, text="Reading file...")
+    status = st.empty()
+    try:
+        from services.regulation_parser import parse_eu_regulation_txt
+
+        # Decode bytes → string (try UTF-8 first, fall back to latin-1)
+        raw = txt_file.getvalue()
+        try:
+            text_content = raw.decode("utf-8")
+        except UnicodeDecodeError:
+            text_content = raw.decode("latin-1")
+        progress.progress(20, text=f"Read {len(text_content):,} chars.")
+
+        # Parse
+        progress.progress(40, text="Extracting ECN entries...")
+        entries = parse_eu_regulation_txt(text_content)
+        if not entries:
+            st.warning("No ECN-style entries found in the file. Check the format.")
+            st.stop()
+
+        progress.progress(60, text=f"Parsed {len(entries)} entries.")
+        status.info(f"📖 Found {len(entries)} ECN entries in {txt_file.name}.")
+
+        # Register source
+        version_str = f"{txt_version.strip()}_{txt_language.lower()}"
+        existing = run_query(
+            "SELECT id FROM data_sources WHERE source_type='annex_i_text' AND version=:v",
+            {"v": version_str},
+        )
+        if existing:
+            source_id = existing[0]["id"]
+            execute(
+                "DELETE FROM manual_entries WHERE source_id=:sid",
+                {"sid": source_id},
+            )
+            execute(
+                "UPDATE data_sources SET row_count=:rc WHERE id=:sid",
+                {"rc": len(entries), "sid": source_id},
+            )
+            status.info(f"♻️ Replacing rows of existing source #{source_id}.")
+        else:
+            inserted = run_query(
+                """
+                INSERT INTO data_sources (source_type, source_name, version, row_count, notes)
+                VALUES ('annex_i_text', :n, :v, :rc, :notes)
+                RETURNING id
+                """,
+                {
+                    "n": f"EU Annex I text ({txt_language} — {txt_version.strip()})",
+                    "v": version_str,
+                    "rc": len(entries),
+                    "notes": f"Parsed from {txt_file.name}",
+                },
+            )
+            source_id = inserted[0]["id"]
+            status.info(f"✨ Registered new source #{source_id}.")
+
+        # Bulk insert into manual_entries
+        progress.progress(80, text=f"Inserting {len(entries)} rows...")
+        import time
+        from psycopg2.extras import execute_values
+        from db.connection import get_engine
+        import json as _json
+
+        batch = []
+        for e in entries:
+            payload = {
+                "code": e["code"],
+                "label": e["label"],
+                "category": e["category"],
+                "subgroup": e["subgroup"],
+                "depth": e["depth"],
+                "language": txt_language,
+                "regulation_version": txt_version.strip(),
+            }
+            batch.append({
+                "source_id": source_id,
+                "entry_key": e["code"],
+                "entry_label": e["label"],
+                "payload": _json.dumps(payload, default=str),
+            })
+
+        t0 = time.time()
+        engine = get_engine()
+        with engine.begin() as conn:
+            raw_conn = conn.connection
+            cur = raw_conn.cursor()
+            execute_values(
+                cur,
+                "INSERT INTO manual_entries (source_id, entry_key, entry_label, payload) "
+                "VALUES %s",
+                batch,
+                template="(%(source_id)s, %(entry_key)s, %(entry_label)s, %(payload)s::jsonb)",
+                page_size=500,
+            )
+            cur.close()
+        elapsed = time.time() - t0
+
+        progress.progress(100, text="Done.")
+        status.success(
+            f"✓ Loaded {len(batch)} {txt_language} regulation entries in {elapsed:.1f}s "
+            f"(source #{source_id}, version {version_str})."
+        )
+        time.sleep(1.5)
+        st.rerun()
+
+    except Exception as exc:
+        progress.empty()
+        status.empty()
+        st.error(f"Load failed: {exc}")
+        st.exception(exc)
+
+
+st.divider()
+
+# ----------------------------------------------------------------------
+# Section 3: Upload generic CSV/JSON to manual_entries
 # ----------------------------------------------------------------------
 st.subheader("📥 Add a custom data source (CSV / JSON)")
 st.caption(
@@ -324,7 +484,130 @@ if submitted:
 st.divider()
 
 # ----------------------------------------------------------------------
-# Section 3: Deactivate / delete a source
+# Section 4: Compliance prompts (for the AI review page)
+# ----------------------------------------------------------------------
+st.subheader("🤖 Compliance prompts (for AI review)")
+st.caption(
+    "System prompts used on the **AI compliance review** page. Multiple "
+    "versions can coexist; only one is active at any time. "
+    "Edit, version, and tune them here without touching code."
+)
+
+from services import llm_review as _llmr  # noqa: E402
+
+prompts = _llmr.list_prompts()
+if not prompts:
+    st.info("No compliance prompts yet. Seed the default EU compliance prompt below.")
+    if st.button("⚡ Seed default EU compliance prompt", type="primary"):
+        try:
+            new_id = _llmr.seed_default_prompt()
+            st.success(f"✓ Default prompt seeded as #{new_id}.")
+            time.sleep(1)
+            st.rerun()
+        except Exception as exc:
+            st.error(f"Seed failed: {exc}")
+else:
+    df_prompts = pd.DataFrame(prompts)
+    st.dataframe(df_prompts, hide_index=True, use_container_width=True)
+
+    cA, cB = st.columns(2)
+    with cA:
+        chosen_id = st.selectbox(
+            "Pick a prompt to view / edit",
+            options=[p["id"] for p in prompts],
+            format_func=lambda i: next(
+                f"#{p['id']} — {p['name']} (v{p['version']}) {'★' if p['is_active'] else ''}"
+                for p in prompts if p["id"] == i
+            ),
+        )
+    with cB:
+        c1, c2 = st.columns(2)
+        with c1:
+            if st.button("Activate this one", use_container_width=True):
+                _llmr.activate_prompt(chosen_id)
+                st.rerun()
+        with c2:
+            if st.button(
+                "🗑️ Delete prompt",
+                use_container_width=True,
+                disabled=len(prompts) <= 1,
+                help="Cannot delete the last remaining prompt.",
+            ):
+                _llmr.delete_prompt(chosen_id)
+                st.rerun()
+
+    full = _llmr.get_prompt(chosen_id)
+    if full:
+        with st.form("edit_prompt_form"):
+            st.markdown(f"### Edit prompt #{full['id']}")
+            ec1, ec2, ec3 = st.columns([2, 1, 1])
+            with ec1:
+                e_name = st.text_input("Name", value=full["name"])
+            with ec2:
+                e_version = st.text_input("Version", value=full["version"])
+            with ec3:
+                e_model = st.text_input(
+                    "Model",
+                    value=full["model"],
+                    help="Anthropic model id, e.g. claude-sonnet-4-6, "
+                         "claude-opus-4-7, claude-haiku-4-5-20251001",
+                )
+            ec4, ec5 = st.columns(2)
+            with ec4:
+                e_temp = st.number_input(
+                    "Temperature",
+                    min_value=0.0,
+                    max_value=1.0,
+                    step=0.1,
+                    value=float(full["temperature"]),
+                )
+            with ec5:
+                e_max_tokens = st.number_input(
+                    "Max tokens",
+                    min_value=500,
+                    max_value=16000,
+                    step=500,
+                    value=int(full["max_tokens"]),
+                )
+            e_notes = st.text_input("Notes", value=full.get("notes") or "")
+            e_system = st.text_area(
+                "System prompt",
+                value=full["system_prompt"],
+                height=400,
+            )
+            save_as_new = st.checkbox(
+                "Save as new version (creates a new prompt row; original kept)",
+                value=False,
+            )
+
+            saved = st.form_submit_button("💾 Save", type="primary")
+
+        if saved:
+            try:
+                target_version = e_version
+                if save_as_new and target_version == full["version"]:
+                    target_version = f"{full['version']}-edit-{int(time.time())}"
+                new_id = _llmr.save_prompt(
+                    name=e_name,
+                    version=target_version,
+                    system_prompt=e_system,
+                    model=e_model,
+                    temperature=float(e_temp),
+                    max_tokens=int(e_max_tokens),
+                    notes=e_notes,
+                    activate=True,
+                )
+                st.success(f"✓ Saved as prompt #{new_id} (version {target_version}). Activated.")
+                time.sleep(1)
+                st.rerun()
+            except Exception as exc:
+                st.error(f"Save failed: {exc}")
+
+
+st.divider()
+
+# ----------------------------------------------------------------------
+# Section 5: Deactivate / delete a data source
 # ----------------------------------------------------------------------
 st.subheader("🗑️ Manage existing sources")
 sources = run_query(
