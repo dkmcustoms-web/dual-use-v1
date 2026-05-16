@@ -1,6 +1,8 @@
 """AI Compliance Review — send shipment/declaration context to an LLM
 using the active system prompt and store the structured response for
 audit + comparison with rule-based screenings.
+
+Includes cost estimation per call and PDF export (both fresh + historical).
 """
 from __future__ import annotations
 
@@ -13,27 +15,29 @@ if str(_ROOT) not in sys.path:
 # ----------------------------------------------------------------------
 
 import json
+import os
 import time
 
 import pandas as pd
 import streamlit as st
 
-from db.connection import execute, run_query
+from db.connection import run_query
 from services import llm_review
+from services.pdf_export import build_review_pdf
+
 
 st.set_page_config(page_title="AI compliance review", page_icon="🤖", layout="wide")
 st.title("🤖 AI compliance review")
 st.caption(
     "Send a shipment/declaration to an LLM (Anthropic Claude) for structured "
-    "compliance analysis. Complements the rule-based screening on the other "
-    "pages — every review is logged for audit and comparison."
+    "compliance analysis. Every review is logged with token usage and "
+    "estimated cost for audit and comparison."
 )
 
 
 # ----------------------------------------------------------------------
-# Health check
+# Health checks
 # ----------------------------------------------------------------------
-import os
 if not os.environ.get("ANTHROPIC_API_KEY"):
     st.error(
         "🔑 `ANTHROPIC_API_KEY` is not set. Add it to .env locally or to "
@@ -56,11 +60,19 @@ if not active:
             st.error(f"Seed failed: {exc}")
     st.stop()
 
+
 # Compact prompt info banner
 with st.container(border=True):
     c1, c2, c3, c4 = st.columns([3, 1, 1, 1])
     with c1:
         st.markdown(f"**Active prompt:** {active['name']} (v{active['version']})")
+        # Show pricing for this model
+        rates = llm_review.PRICING_USD_PER_MTOK.get(active["model"])
+        if rates:
+            st.caption(
+                f"💰 Rate: ${rates['input']:.2f} input / "
+                f"${rates['output']:.2f} output per MTok"
+            )
     with c2:
         st.metric("Model", active["model"])
     with c3:
@@ -123,7 +135,6 @@ elif source_mode == "From a previous screening":
         sid = options[chosen]
         chosen_row = next(s for s in screenings if s["id"] == sid)
 
-        # Build the context block from the screening data
         inputs = chosen_row["inputs"] or {}
         if isinstance(inputs, str):
             try:
@@ -171,10 +182,16 @@ with col_run:
     )
 with col_info:
     if context_text:
+        approx_input_tokens = len(context_text) // 4
+        rates = llm_review.PRICING_USD_PER_MTOK.get(active["model"])
+        cost_hint = ""
+        if rates:
+            est_in = approx_input_tokens / 1_000_000 * rates["input"]
+            # rough output estimate: 1500 tokens
+            est_out = 1500 / 1_000_000 * rates["output"]
+            cost_hint = f" · est. cost ~${est_in + est_out:.4f} USD"
         st.caption(
-            f"Context length: ~{len(context_text):,} chars "
-            f"(~{len(context_text) // 4:,} tokens). "
-            f"Each review costs an API call to Anthropic."
+            f"Context: ~{len(context_text):,} chars (~{approx_input_tokens:,} input tokens){cost_hint}"
         )
 
 if run_clicked:
@@ -187,6 +204,10 @@ if run_clicked:
             st.exception(exc)
             st.stop()
         elapsed = time.time() - t0
+
+    cost = llm_review.calculate_cost(
+        result["model"], result["input_tokens"], result["output_tokens"]
+    )
 
     # ---- Display results -------------------------------------------
     risk_color = {
@@ -209,13 +230,30 @@ if run_clicked:
             help="Input → output tokens",
         )
     with c4:
-        st.metric("Latency", f"{elapsed:.1f}s")
+        if cost:
+            st.metric(
+                "Cost (USD)",
+                f"${cost['total_usd']:.4f}",
+                help=(
+                    f"€{cost['total_eur']:.4f} indicative · "
+                    f"Rates: ${cost['rate_in']:.2f}/${cost['rate_out']:.2f} per MTok · "
+                    f"Latency: {elapsed:.1f}s"
+                ),
+            )
+        else:
+            st.metric("Latency", f"{elapsed:.1f}s")
+
+    if cost:
+        st.caption(
+            f"💰 **Cost breakdown:** input ${cost['input_usd']:.6f} + "
+            f"output ${cost['output_usd']:.6f} = **${cost['total_usd']:.6f}** "
+            f"(~ €{cost['total_eur']:.6f}) · Latency {elapsed:.1f}s"
+        )
 
     # Try to render the sections nicely
     sections = llm_review.extract_sections(result["raw_response"])
 
     if "_full" in sections:
-        # Fallback when section extraction failed
         st.markdown(sections["_full"])
     else:
         ordered = [
@@ -266,7 +304,32 @@ if run_clicked:
                 "rc": result.get("recommendation"),
             },
         )
-        st.success(f"✓ Logged to audit trail as screening #{rows[0]['id']}.")
+        new_review_id = rows[0]["id"]
+        st.success(f"✓ Logged to audit trail as screening #{new_review_id}.")
+
+        # ---- PDF download for the fresh review --------------------
+        pdf_bytes = build_review_pdf({
+            "id": new_review_id,
+            "created_at": pd.Timestamp.utcnow(),
+            "model": result["model"],
+            "prompt_name": active["name"],
+            "prompt_version": active["version"],
+            "risk_level": result.get("risk_level"),
+            "recommendation": result.get("recommendation"),
+            "raw_response": result["raw_response"],
+            "input_tokens": result["input_tokens"],
+            "output_tokens": result["output_tokens"],
+            "context_text": context_text,
+            "cost": cost,
+        })
+        st.download_button(
+            "📄 Download as PDF",
+            data=pdf_bytes,
+            file_name=f"ai_review_{new_review_id}_{result.get('risk_level') or 'unknown'}.pdf",
+            mime="application/pdf",
+            type="primary",
+        )
+
     except Exception as exc:
         st.warning(f"Result shown above but audit log failed: {exc}")
 
@@ -274,9 +337,10 @@ if run_clicked:
 st.divider()
 
 # ----------------------------------------------------------------------
-# History — recent LLM reviews
+# History — recent LLM reviews with cost & per-row PDF download
 # ----------------------------------------------------------------------
 st.subheader("Recent AI reviews")
+
 rows = run_query(
     """
     SELECT  s.id, s.created_at, s.llm_risk_level, s.llm_recommendation,
@@ -290,7 +354,106 @@ rows = run_query(
     """
 )
 if rows:
-    df = pd.DataFrame(rows)
-    st.dataframe(df, hide_index=True, use_container_width=True)
+    # Enrich with cost
+    enriched = []
+    total_usd = 0.0
+    for r in rows:
+        c = llm_review.calculate_cost(
+            r["llm_model"] or "",
+            r["llm_input_tokens"] or 0,
+            r["llm_output_tokens"] or 0,
+        )
+        cost_usd = c["total_usd"] if c else None
+        if cost_usd is not None:
+            total_usd += cost_usd
+        enriched.append({
+            "id": r["id"],
+            "created_at": r["created_at"],
+            "risk": r["llm_risk_level"],
+            "recommendation": r["llm_recommendation"],
+            "model": r["llm_model"],
+            "in_tok": r["llm_input_tokens"],
+            "out_tok": r["llm_output_tokens"],
+            "cost_usd": f"${cost_usd:.4f}" if cost_usd is not None else "?",
+            "prompt": f'{r.get("prompt_name") or "?"} ({r.get("prompt_version") or "?"})',
+        })
+
+    st.dataframe(pd.DataFrame(enriched), hide_index=True, use_container_width=True)
+    st.caption(
+        f"💰 Total estimated cost for the last {len(rows)} reviews: "
+        f"**${total_usd:.4f} USD** (~ €{total_usd * llm_review.USD_TO_EUR:.4f})"
+    )
+
+    # ---- PDF download for a historical review ---------------------
+    st.markdown("##### 📄 Download a historical review as PDF")
+    review_id_options = {
+        f"#{r['id']} · {r['created_at'].strftime('%Y-%m-%d %H:%M')} · "
+        f"risk={r['llm_risk_level'] or '?'} · {r['llm_model'] or '?'}": r["id"]
+        for r in rows
+    }
+    chosen_label = st.selectbox(
+        "Pick a review",
+        list(review_id_options.keys()),
+        key="history_pdf_select",
+    )
+    if st.button("📄 Generate PDF", key="history_pdf_btn"):
+        rid = review_id_options[chosen_label]
+        full = run_query(
+            """
+            SELECT  s.id, s.created_at,
+                    s.llm_model AS model,
+                    s.llm_risk_level AS risk_level,
+                    s.llm_recommendation AS recommendation,
+                    s.llm_raw_response AS raw_response,
+                    s.llm_input_tokens AS input_tokens,
+                    s.llm_output_tokens AS output_tokens,
+                    s.inputs,
+                    cp.name AS prompt_name,
+                    cp.version AS prompt_version
+            FROM    screenings s
+            LEFT JOIN compliance_prompts cp ON cp.id = s.prompt_id
+            WHERE   s.id = :rid
+            """,
+            {"rid": rid},
+        )
+        if not full:
+            st.error("Review not found.")
+        else:
+            r = full[0]
+            inputs = r.get("inputs") or {}
+            if isinstance(inputs, str):
+                try:
+                    inputs = json.loads(inputs)
+                except Exception:
+                    inputs = {}
+            ctx = inputs.get("context_text", "") if isinstance(inputs, dict) else ""
+
+            c = llm_review.calculate_cost(
+                r["model"] or "",
+                r["input_tokens"] or 0,
+                r["output_tokens"] or 0,
+            )
+            pdf_bytes = build_review_pdf({
+                "id": r["id"],
+                "created_at": r["created_at"],
+                "model": r["model"],
+                "prompt_name": r.get("prompt_name") or "?",
+                "prompt_version": r.get("prompt_version") or "?",
+                "risk_level": r["risk_level"],
+                "recommendation": r["recommendation"],
+                "raw_response": r["raw_response"] or "",
+                "input_tokens": r["input_tokens"] or 0,
+                "output_tokens": r["output_tokens"] or 0,
+                "context_text": ctx,
+                "cost": c,
+            })
+            st.download_button(
+                f"⬇ Download ai_review_{r['id']}.pdf",
+                data=pdf_bytes,
+                file_name=f"ai_review_{r['id']}_{r['risk_level'] or 'unknown'}.pdf",
+                mime="application/pdf",
+                type="primary",
+                key=f"download_pdf_{r['id']}",
+            )
 else:
     st.info("No AI reviews yet.")

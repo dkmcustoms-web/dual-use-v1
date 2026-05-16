@@ -445,3 +445,61 @@ def extract_sections(text: str) -> dict[str, str]:
         body = parts[i + 1].strip() if i + 1 < len(parts) else ""
         sections[title] = body
     return sections
+
+
+# ---------------------------------------------------------------------
+# Pricing & cost calculation
+# ---------------------------------------------------------------------
+# Standard tier pricing per MILLION tokens (USD).
+# Source: https://www.anthropic.com/pricing (verified May 2026).
+# Does NOT account for prompt caching (90% off cached input) or
+# batch processing (50% off) — those need separate handling.
+PRICING_USD_PER_MTOK = {
+    "claude-opus-4-7":           {"input": 5.00, "output": 25.00},
+    "claude-opus-4-6":           {"input": 5.00, "output": 25.00},
+    "claude-sonnet-4-6":         {"input": 3.00, "output": 15.00},
+    "claude-haiku-4-5-20251001": {"input": 1.00, "output": 5.00},
+    "claude-haiku-4-5":          {"input": 1.00, "output": 5.00},
+    # Legacy fallbacks (best-effort)
+    "claude-sonnet-4-5":         {"input": 3.00, "output": 15.00},
+    "claude-opus-4-5":           {"input": 15.00, "output": 75.00},
+}
+
+# Indicative USD → EUR rate. Kept as a constant; refresh occasionally.
+# This is purely for display — actual billing is in USD.
+USD_TO_EUR = 0.92
+
+
+def calculate_cost(
+    model: str,
+    input_tokens: int,
+    output_tokens: int,
+) -> dict | None:
+    """Compute estimated USD + EUR cost for a single API call.
+
+    Returns None if the model is not in the pricing table. Falls back to
+    prefix matching for models with date suffixes (e.g. claude-haiku-4-5-X).
+    """
+    if not model:
+        return None
+    rates = PRICING_USD_PER_MTOK.get(model)
+    if not rates:
+        # Prefix match for date-suffixed model strings
+        for key in PRICING_USD_PER_MTOK:
+            if model.startswith(key):
+                rates = PRICING_USD_PER_MTOK[key]
+                break
+    if not rates:
+        return None
+
+    input_usd = (input_tokens or 0) / 1_000_000 * rates["input"]
+    output_usd = (output_tokens or 0) / 1_000_000 * rates["output"]
+    total_usd = input_usd + output_usd
+    return {
+        "input_usd": round(input_usd, 6),
+        "output_usd": round(output_usd, 6),
+        "total_usd": round(total_usd, 6),
+        "total_eur": round(total_usd * USD_TO_EUR, 6),
+        "rate_in":  rates["input"],
+        "rate_out": rates["output"],
+    }
