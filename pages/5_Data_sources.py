@@ -214,15 +214,8 @@ if load_clicked:
 st.divider()
 
 # ----------------------------------------------------------------------
-# Section 2: Load BUNDLED Dutch Annex I (no upload needed)
+# Sections 2 & 3: Load BUNDLED Annex I (NL + EN), status-aware
 # ----------------------------------------------------------------------
-st.subheader("🇳🇱 Import bundled Dutch Annex I (2025-11)")
-st.caption(
-    "Pre-parsed JSON of the consolidated Dutch text "
-    "(EUR-Lex 02021R0821-NL-15.11.2025, ~400 entries with full narrative content). "
-    "Lives in `data/annex_i_nl_2025-11.json` — no upload required."
-)
-
 bundled_nl_path = _ROOT / "data" / "annex_i_nl_2025-11.json"
 bundled_en_path = _ROOT / "data" / "annex_i_en_2025-11.json"
 
@@ -320,28 +313,86 @@ def _import_bundled(path, language_label, language_code):
         st.exception(exc)
 
 
-if not bundled_nl_path.exists():
-    st.warning(f"Bundled NL file not found at {bundled_nl_path}.")
-else:
-    if st.button("📦 Import bundled NL Annex I (2025-11)", type="primary", use_container_width=True, key="import_bundled_nl_btn"):
-        _import_bundled(bundled_nl_path, "Dutch", "NL")
+def _bundled_source_status(version_str: str) -> dict | None:
+    """Return existing data_source row + entry/embedding stats if already imported."""
+    rows = run_query(
+        """
+        SELECT  ds.id, ds.source_name, ds.row_count, ds.is_active,
+                ds.loaded_at,
+                (SELECT COUNT(*) FROM manual_entries me WHERE me.source_id = ds.id)
+                    AS actual_rows,
+                (SELECT COUNT(*) FROM manual_entries me
+                  WHERE me.source_id = ds.id AND me.embedding IS NOT NULL)
+                    AS embedded_rows
+        FROM    data_sources ds
+        WHERE   ds.source_type = 'annex_i_text'
+          AND   ds.version = :v
+        """,
+        {"v": version_str},
+    )
+    return rows[0] if rows else None
+
+
+def _render_bundled_section(
+    flag_emoji: str,
+    language_full: str,
+    language_code: str,
+    path: Path,
+    bundle_version: str = "2025-11",
+):
+    """One reusable section per bundled language with status awareness."""
+    version_str = f"{bundle_version}_{language_code.lower()}_bundled"
+    status = _bundled_source_status(version_str)
+    st.subheader(f"{flag_emoji} Bundled {language_full} Annex I ({bundle_version})")
+
+    if not path.exists():
+        st.error(f"Bundled file not found at `{path}`. Re-deploy the repo.")
+        return
+
+    if status:
+        # Already imported — compact status banner with secondary re-import option
+        ts = status.get("loaded_at")
+        ts_str = ts.strftime("%Y-%m-%d %H:%M") if hasattr(ts, "strftime") else str(ts)
+        with st.container(border=True):
+            c1, c2, c3, c4 = st.columns([3, 1, 1, 1])
+            with c1:
+                st.markdown(f"**✓ Imported** · _{status['source_name']}_")
+                st.caption(f"Loaded {ts_str} from `data/annex_i_{language_code.lower()}_{bundle_version}.json`")
+            with c2:
+                st.metric("Entries", f"{status['actual_rows']:,}")
+            with c3:
+                st.metric(
+                    "Embedded",
+                    f"{status['embedded_rows']}/{status['actual_rows']}",
+                )
+            with c4:
+                if st.button(
+                    "🔄 Re-import",
+                    use_container_width=True,
+                    key=f"reimport_{language_code}",
+                    help="Replace existing rows from the bundled JSON. Used if the JSON in the repo was updated.",
+                ):
+                    _import_bundled(path, language_full, language_code)
+    else:
+        # Not imported yet — prominent primary button
+        st.caption(
+            f"Pre-parsed JSON of the consolidated {language_full} text. "
+            f"Lives in `data/annex_i_{language_code.lower()}_{bundle_version}.json` — no upload required."
+        )
+        if st.button(
+            f"📦 Import bundled {language_code} Annex I ({bundle_version})",
+            type="primary",
+            use_container_width=True,
+            key=f"import_{language_code}",
+        ):
+            _import_bundled(path, language_full, language_code)
+
+
+_render_bundled_section("🇳🇱", "Dutch",  "NL", bundled_nl_path)
 
 st.divider()
 
-# ----------------------------------------------------------------------
-# Section 3: Load BUNDLED English Annex I
-# ----------------------------------------------------------------------
-st.subheader("🇬🇧 Import bundled English Annex I (2025-11)")
-st.caption(
-    "Pre-parsed JSON of the consolidated English text "
-    "(EUR-Lex 02021R0821-EN-15.11.2025, ~550 entries with full narrative content). "
-    "Combined with NL gives bilingual narrative coverage for cross-language search."
-)
-if not bundled_en_path.exists():
-    st.warning(f"Bundled EN file not found at {bundled_en_path}.")
-else:
-    if st.button("📦 Import bundled EN Annex I (2025-11)", type="primary", use_container_width=True, key="import_bundled_en_btn"):
-        _import_bundled(bundled_en_path, "English", "EN")
+_render_bundled_section("🇬🇧", "English", "EN", bundled_en_path)
 
 st.divider()
 
