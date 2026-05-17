@@ -34,11 +34,80 @@ from services.pdf_export import build_review_pdf
 st.set_page_config(page_title="AI compliance review", page_icon="🤖", layout="wide")
 st.title("🤖 AI compliance review")
 st.caption(
-    "Run a compliance assessment on a shipment/declaration. Local review uses "
-    "Claude's training knowledge (deterministic, cheap). Optionally add a "
-    "web-augmented comparison using Anthropic's web search, constrained to "
-    "official EU/OFAC/UN sources only."
+    "**Gebruik dit voor:** volledige sanctions/compliance review van een **shipment of "
+    "declaration** — parties, route, goederen, betaling, eindgebruik. Geeft je een "
+    "Risk Level + Recommendation + 7-secties analyse.  \n"
+    "**Niet hiervoor:** snelle product-check zonder context → gebruik dan "
+    "**Search product**."
 )
+
+
+# ----------------------------------------------------------------------
+# Example shipment — realistic Belgian dual-use case with red flags
+# Used by the "Use example" button to demo what good input looks like.
+# ----------------------------------------------------------------------
+EXAMPLE_SHIPMENT = """Exporter: ABC Marine Equipment BV, Antwerpen, BE (EORI BE0123456789)
+Consignee: Aqua Trading FZCO, Dubai, UAE
+End user: Mediterranean Research Foundation, Dubai (stated, not verified)
+
+Goods:
+- 25x closed-circuit diving rebreathers, model XR-300
+- 5x active sonar systems for underwater research
+
+TARIC codes: 9015808100, 8525806000
+Country of origin: NL
+Destination: AE
+Route: BE (port Antwerp) -> TR (Istanbul, transshipment) -> AE (Jebel Ali)
+Vessel: MV NORTHWIND, IMO 9876543, Liberian flag
+
+Payment terms: 80% advance via Mashreq Bank Dubai, 20% on delivery
+Invoice value: EUR 185,000
+No specific end-use declaration provided
+
+Notes:
+- Consignee was incorporated 3 months ago
+- Previously requested 50x rebreathers in a separate inquiry (canceled)"""
+
+
+# ----------------------------------------------------------------------
+# Input validation — flag inputs that look too thin for a full shipment review
+# ----------------------------------------------------------------------
+def _validate_context(text: str) -> list[str]:
+    """Return list of warnings if context looks insufficient for a full review.
+
+    Empty list = looks fine. Multiple warnings = probably should use Search product.
+    """
+    warnings: list[str] = []
+    text_lower = text.lower()
+    text_stripped = text.strip()
+
+    if len(text_stripped) < 100:
+        warnings.append(
+            f"Very short input ({len(text_stripped)} chars) — typical shipment dossiers are 300+ chars."
+        )
+    if text.count("\n") < 3:
+        warnings.append(
+            "Input is on a single or few lines — shipment context usually has multiple fields "
+            "(exporter, consignee, goods, route, etc.) on separate lines."
+        )
+
+    party_markers = ["exporter", "consignee", "importer", "end user", "end-user",
+                     "shipper", "buyer", "seller", "afzender", "ontvanger"]
+    if not any(m in text_lower for m in party_markers):
+        warnings.append(
+            "No party identified (no Exporter/Consignee/End user mentioned) — "
+            "sanctions screening requires identifying the parties involved."
+        )
+
+    geo_markers = ["country", "destination", "origin", "via ", " to ", " from ",
+                   "route", "transit", "land", "via", "naar", "bestemming"]
+    if not any(m in text_lower for m in geo_markers):
+        warnings.append(
+            "No country/destination/route mentioned — route-risk analysis "
+            "(transit countries, circumvention patterns) requires geographic context."
+        )
+
+    return warnings
 
 
 # ----------------------------------------------------------------------
@@ -117,20 +186,55 @@ source_mode = st.radio(
 context_text = ""
 
 if source_mode == "Manual input":
+    # Initialize the input session state
+    if "manual_input_text" not in st.session_state:
+        st.session_state.manual_input_text = (
+            st.session_state.review_context if st.session_state.review_context else ""
+        )
+
+    # Example shipment button + caption row (BEFORE the textarea so it can update it)
+    bcol1, bcol2 = st.columns([1, 3])
+    with bcol1:
+        if st.button("📋 Use example shipment", use_container_width=True, key="use_example_btn"):
+            st.session_state.manual_input_text = EXAMPLE_SHIPMENT
+            st.rerun()
+    with bcol2:
+        st.caption(
+            "Loads a realistic Belgian export test case (rebreathers + sonar to UAE via Turkey) "
+            "with multiple compliance red flags — useful to see what AI compliance review can do "
+            "with proper input."
+        )
+
+    # Textarea bound to session state via key (so the button can update it)
     context_text = st.text_area(
         "Paste shipment details, declaration data, party list, route, goods description, etc.",
+        key="manual_input_text",
         height=350,
-        value=st.session_state.review_context if st.session_state.review_context else "",
         placeholder=(
-            "Example:\n\n"
-            "Exporter: ABC Trading BV, Antwerp, BE\n"
-            "Consignee: XYZ Holdings LLC, Dubai, UAE\n"
-            "End user: Unknown\n"
-            "Goods: 50x industrial CNC milling machine controllers, HS 8537.10\n"
-            "Country of origin: DE\n"
-            "Destination: AE (via TR)\n"
+            "Voorbeeld:\n\n"
+            "Exporter: ...\n"
+            "Consignee: ...\n"
+            "End user: ...\n"
+            "Goods: ...\n"
+            "Destination: ...\n"
+            "Payment: ..."
         ),
     )
+
+    # Real-time validation: warn user if input looks too thin for a full shipment review
+    if context_text and context_text.strip():
+        validation_warnings = _validate_context(context_text)
+        if validation_warnings:
+            with st.container(border=True):
+                st.markdown("**⚠ Input looks limited for a full shipment compliance review**")
+                for w in validation_warnings:
+                    st.markdown(f"- {w}")
+                st.info(
+                    "💡 **For a quick product check** (e.g. \"is X a controlled item?\"), "
+                    "use the **📦 Search product** page instead — it auto-runs hybrid search "
+                    "+ AI verdict with relevant ECN-codes preloaded as context."
+                )
+
 elif source_mode == "From a previous screening":
     screenings = run_query(
         """

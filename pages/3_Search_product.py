@@ -303,9 +303,11 @@ def render_hit(hit: dict, query: str):
 st.set_page_config(page_title="Search product", page_icon="📦", layout="wide")
 st.title("📦 Search product")
 st.caption(
-    "Hybrid search: lexical (trigram + ILIKE) and semantic (vector cosine). "
-    "Works across Dutch and English. Semantic search bridges concepts — "
-    "e.g. _dive material_ matches _rebreathers_."
+    "**Gebruik dit voor:** snel checken of een product/technologie mogelijk dual-use "
+    "gecontroleerd is onder EU Annex I (Reg. 2021/821). Geeft je een leesbaar verdict "
+    "+ verificatievragen + relevante ECN-codes.  \n"
+    "**Niet hiervoor:** volledige shipment-review met parties/route/betaling → gebruik dan "
+    "**AI compliance review**."
 )
 
 active = annex_i.get_active_annex_source()
@@ -448,37 +450,43 @@ def _run_and_store_verdict(query: str, merged: list[dict], routes_enabled_list: 
 # ----------------------------------------------------------------------
 if search_clicked and query.strip():
     q = query.strip()
-    with st.spinner("🔍 Searching…"):
-        trigram_hits = run_trigram_search(q) if "trigram" in routes_enabled else []
-        ilike_hits = run_ilike_search(q) if "ilike" in routes_enabled else []
-        if "semantic" in routes_enabled:
-            sem = run_semantic_search(q, min_sim=min_sem)
-            sem_annex = sem["annex"]
-            sem_manual = sem["manual"]
-            sem_err = sem["error"]
-            sem_cost = sem["cost"]
-        else:
-            sem_annex, sem_manual, sem_err, sem_cost = [], [], None, None
+    try:
+        with st.spinner("🔍 Searching…"):
+            trigram_hits = run_trigram_search(q) if "trigram" in routes_enabled else []
+            ilike_hits = run_ilike_search(q) if "ilike" in routes_enabled else []
+            if "semantic" in routes_enabled:
+                sem = run_semantic_search(q, min_sim=min_sem)
+                sem_annex = sem["annex"]
+                sem_manual = sem["manual"]
+                sem_err = sem["error"]
+                sem_cost = sem["cost"]
+            else:
+                sem_annex, sem_manual, sem_err, sem_cost = [], [], None, None
 
-        merged = merge_results(trigram_hits, ilike_hits, sem_annex, sem_manual)
+            merged = merge_results(trigram_hits, ilike_hits, sem_annex, sem_manual)
 
-    st.session_state.last_search = {
-        "query": q,
-        "trigram_hits": trigram_hits,
-        "ilike_hits": ilike_hits,
-        "sem_annex": sem_annex,
-        "sem_manual": sem_manual,
-        "sem_err": sem_err,
-        "sem_cost": sem_cost,
-        "merged": merged,
-        "routes_enabled": list(routes_enabled),
-    }
-    st.session_state.last_verdict = None  # clear previous
+        st.session_state.last_search = {
+            "query": q,
+            "trigram_hits": trigram_hits,
+            "ilike_hits": ilike_hits,
+            "sem_annex": sem_annex,
+            "sem_manual": sem_manual,
+            "sem_err": sem_err,
+            "sem_cost": sem_cost,
+            "merged": merged,
+            "routes_enabled": list(routes_enabled),
+        }
+        st.session_state.last_verdict = None  # clear previous
 
-    # Auto-run Claude if we have results AND an API key
-    if merged and os.environ.get("ANTHROPIC_API_KEY"):
-        with st.spinner(f"🤖 Claude analyzing top {min(8, len(merged))} hits..."):
-            _run_and_store_verdict(q, merged, list(routes_enabled))
+        # Auto-run Claude if we have results AND an API key
+        if merged and os.environ.get("ANTHROPIC_API_KEY"):
+            with st.spinner(f"🤖 Claude analyzing top {min(8, len(merged))} hits..."):
+                _run_and_store_verdict(q, merged, list(routes_enabled))
+    except Exception as exc:
+        st.error(f"⚠ Search failed: {exc}")
+        st.exception(exc)
+        # Keep page usable even after error
+        st.session_state.last_search = None
 
 
 # ----------------------------------------------------------------------
@@ -584,3 +592,28 @@ if st.session_state.last_search:
             )
             for hit in merged[:30]:
                 render_hit(hit, q)
+
+
+# ----------------------------------------------------------------------
+# Debug panel — always visible, helps diagnose "page goes blank" issues
+# ----------------------------------------------------------------------
+with st.expander("🔧 Debug — session state inspector"):
+    last_s = st.session_state.get("last_search")
+    last_v = st.session_state.get("last_verdict")
+    st.write({
+        "search_clicked_this_run": search_clicked,
+        "query": query,
+        "routes_enabled": list(routes_enabled),
+        "last_search_set": last_s is not None,
+        "last_search_query": last_s.get("query") if last_s else None,
+        "last_search_merged_count": len(last_s.get("merged", [])) if last_s else 0,
+        "last_search_trigram_count": len(last_s.get("trigram_hits", [])) if last_s else 0,
+        "last_search_ilike_count": len(last_s.get("ilike_hits", [])) if last_s else 0,
+        "last_search_sem_annex_count": len(last_s.get("sem_annex", [])) if last_s else 0,
+        "last_search_sem_manual_count": len(last_s.get("sem_manual", [])) if last_s else 0,
+        "last_search_sem_err": last_s.get("sem_err") if last_s else None,
+        "last_verdict_set": last_v is not None,
+        "last_verdict_error": (last_v or {}).get("error") if isinstance(last_v, dict) else None,
+        "anthropic_key_set": bool(os.environ.get("ANTHROPIC_API_KEY")),
+        "openai_key_set": bool(os.environ.get("OPENAI_API_KEY")),
+    })
