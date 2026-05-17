@@ -140,3 +140,118 @@ def list_categories() -> list[dict]:
         """,
         {"sid": source["id"]},
     )
+
+
+# =====================================================================
+# SEMANTIC SEARCH — cosine-similarity via pgvector
+# =====================================================================
+
+def semantic_search_annex(query_vector: list[float], limit: int = 20, min_similarity: float = 0.30) -> list[dict]:
+    """Find Annex I items closest to the query vector by cosine similarity.
+
+    Only considers rows where embedding IS NOT NULL.
+    Returns rows ordered by similarity (highest first) with a 'score'
+    column representing cosine similarity in [-1, 1] (typically 0.0–0.9).
+    """
+    source = get_active_annex_source()
+    if not source:
+        return []
+    from services.embeddings import to_pg_vector_literal
+    vec_lit = to_pg_vector_literal(query_vector)
+    return run_query(
+        """
+        SELECT  a.id            AS id,
+                a.parent_id     AS parent_id,
+                a.code          AS code,
+                a.label         AS label,
+                a.category      AS category,
+                a.subgroup      AS subgroup,
+                a.depth         AS depth,
+                p.label         AS parent_label,
+                p.code          AS parent_code,
+                1 - (a.embedding <=> CAST(:qv AS vector)) AS score
+        FROM    annex_i_items a
+        LEFT JOIN annex_i_items p
+               ON p.id = a.parent_id
+              AND p.source_id = a.source_id
+        WHERE   a.source_id = :sid
+          AND   a.embedding IS NOT NULL
+          AND   1 - (a.embedding <=> CAST(:qv AS vector)) >= :minsim
+        ORDER BY a.embedding <=> CAST(:qv AS vector)
+        LIMIT   :limit
+        """,
+        {"qv": vec_lit, "sid": source["id"], "minsim": min_similarity, "limit": limit},
+    )
+
+
+def semantic_search_manual(query_vector: list[float], limit: int = 20, min_similarity: float = 0.30) -> list[dict]:
+    """Find manual_entries (NL/EN TXT) closest to the query vector."""
+    from services.embeddings import to_pg_vector_literal
+    vec_lit = to_pg_vector_literal(query_vector)
+    return run_query(
+        """
+        SELECT  me.entry_key       AS entry_key,
+                me.entry_label     AS entry_label,
+                me.payload         AS payload,
+                ds.source_name     AS source_name,
+                ds.version         AS version,
+                1 - (me.embedding <=> CAST(:qv AS vector)) AS score
+        FROM    manual_entries me
+        JOIN    data_sources ds ON ds.id = me.source_id
+        WHERE   ds.is_active = TRUE
+          AND   me.embedding IS NOT NULL
+          AND   1 - (me.embedding <=> CAST(:qv AS vector)) >= :minsim
+        ORDER BY me.embedding <=> CAST(:qv AS vector)
+        LIMIT   :limit
+        """,
+        {"qv": vec_lit, "minsim": min_similarity, "limit": limit},
+    )
+
+
+def count_embedded_annex_items() -> dict:
+    """Stats on how many Annex I rows have embeddings vs total."""
+    source = get_active_annex_source()
+    if not source:
+        return {"total": 0, "embedded": 0, "remaining": 0}
+    rows = run_query(
+        """
+        SELECT  COUNT(*)                              AS total,
+                COUNT(*) FILTER (WHERE embedding IS NOT NULL) AS embedded
+        FROM    annex_i_items
+        WHERE   source_id = :sid
+          AND   code ~ '^[0-9][A-E][0-9]{3}'
+        """,
+        {"sid": source["id"]},
+    )
+    if not rows:
+        return {"total": 0, "embedded": 0, "remaining": 0}
+    r = rows[0]
+    return {
+        "total": r["total"],
+        "embedded": r["embedded"],
+        "remaining": r["total"] - r["embedded"],
+    }
+
+
+def count_embedded_manual_entries() -> dict:
+    """Stats on how many manual_entries rows have embeddings vs total."""
+    rows = run_query(
+        """
+        SELECT  ds.id           AS source_id,
+                ds.source_name  AS source_name,
+                ds.version      AS version,
+                COUNT(*)                                          AS total,
+                COUNT(*) FILTER (WHERE me.embedding IS NOT NULL)  AS embedded
+        FROM    manual_entries me
+        JOIN    data_sources ds ON ds.id = me.source_id
+        WHERE   ds.is_active = TRUE
+        GROUP BY ds.id, ds.source_name, ds.version
+        ORDER BY ds.id
+        """
+    )
+    return {
+        "by_source": rows,
+        "total": sum(r["total"] for r in rows),
+        "embedded": sum(r["embedded"] for r in rows),
+        "remaining": sum(r["total"] - r["embedded"] for r in rows),
+    }

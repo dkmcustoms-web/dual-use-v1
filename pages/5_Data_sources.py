@@ -11,6 +11,7 @@ if str(_ROOT) not in sys.path:
 
 import io
 import json
+import os
 import time
 
 import pandas as pd
@@ -218,116 +219,337 @@ st.divider()
 st.subheader("🇳🇱 Import bundled Dutch Annex I (2025-11)")
 st.caption(
     "Pre-parsed JSON of the consolidated Dutch text "
-    "(EUR-Lex 02021R0821-NL-15.11.2025, 407 entries). "
-    "Lives in `data/annex_i_nl_2025-11.json` in the repo — no upload required. "
-    "Loaded into `manual_entries` and searchable from the **Search product** page."
+    "(EUR-Lex 02021R0821-NL-15.11.2025, ~400 entries with full narrative content). "
+    "Lives in `data/annex_i_nl_2025-11.json` — no upload required."
 )
 
-bundled_path = _ROOT / "data" / "annex_i_nl_2025-11.json"
-if not bundled_path.exists():
-    st.warning(f"Bundled file not found at {bundled_path}.")
+bundled_nl_path = _ROOT / "data" / "annex_i_nl_2025-11.json"
+bundled_en_path = _ROOT / "data" / "annex_i_en_2025-11.json"
+
+
+def _import_bundled(path, language_label, language_code):
+    """Import a bundled language JSON into manual_entries. Reusable for NL + EN."""
+    progress = st.progress(0, text=f"Reading bundled {language_label} JSON...")
+    status = st.empty()
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        meta = data.get("metadata", {})
+        entries = data.get("entries", [])
+        progress.progress(30, text=f"Read {len(entries)} {language_label} entries.")
+        status.info(
+            f"📖 Bundled JSON: {meta.get('source')} — "
+            f"v{meta.get('version')} — {len(entries)} entries."
+        )
+
+        version_str = f"{meta.get('version', '2025-11')}_{language_code.lower()}_bundled"
+        existing = run_query(
+            "SELECT id FROM data_sources WHERE source_type='annex_i_text' AND version=:v",
+            {"v": version_str},
+        )
+        if existing:
+            source_id = existing[0]["id"]
+            execute("DELETE FROM manual_entries WHERE source_id=:sid", {"sid": source_id})
+            execute(
+                "UPDATE data_sources SET row_count=:rc WHERE id=:sid",
+                {"rc": len(entries), "sid": source_id},
+            )
+            status.info(f"♻️ Replacing rows of existing source #{source_id}.")
+        else:
+            inserted = run_query(
+                """
+                INSERT INTO data_sources (source_type, source_name, version, row_count, notes)
+                VALUES ('annex_i_text', :n, :v, :rc, :notes)
+                RETURNING id
+                """,
+                {
+                    "n": f"EU Annex I ({language_code}) — {meta.get('version', '2025-11')} bundled",
+                    "v": version_str,
+                    "rc": len(entries),
+                    "notes": f"Loaded from bundled JSON (data/annex_i_{language_code.lower()}_2025-11.json).",
+                },
+            )
+            source_id = inserted[0]["id"]
+
+        progress.progress(60, text=f"Inserting {len(entries)} rows...")
+        from psycopg2.extras import execute_values
+        from db.connection import get_engine
+        batch = []
+        for e in entries:
+            payload = {
+                "code": e.get("code"),
+                "label": e.get("label"),
+                "category": e.get("category"),
+                "subgroup": e.get("subgroup"),
+                "depth": e.get("depth"),
+                "full_content": e.get("full_content", ""),
+                "language": language_code,
+                "regulation_version": meta.get("version"),
+                "source": "bundled",
+            }
+            batch.append({
+                "source_id": source_id,
+                "entry_key": e.get("code"),
+                "entry_label": e.get("label"),
+                "payload": json.dumps(payload, default=str),
+            })
+        t0 = time.time()
+        engine = get_engine()
+        with engine.begin() as conn:
+            raw_conn = conn.connection
+            cur = raw_conn.cursor()
+            execute_values(
+                cur,
+                "INSERT INTO manual_entries (source_id, entry_key, entry_label, payload) VALUES %s",
+                batch,
+                template="(%(source_id)s, %(entry_key)s, %(entry_label)s, %(payload)s::jsonb)",
+                page_size=500,
+            )
+            cur.close()
+        elapsed = time.time() - t0
+
+        progress.progress(100, text="Done.")
+        status.success(
+            f"✓ Imported {len(batch)} {language_label} entries in {elapsed:.1f}s (source #{source_id})."
+        )
+        time.sleep(1.5)
+        st.rerun()
+    except Exception as exc:
+        progress.empty()
+        status.empty()
+        st.error(f"Import failed: {exc}")
+        st.exception(exc)
+
+
+if not bundled_nl_path.exists():
+    st.warning(f"Bundled NL file not found at {bundled_nl_path}.")
 else:
-    if st.button(
-        "📦 Import bundled NL Annex I (2025-11) into database",
-        type="primary",
-        use_container_width=True,
-        key="import_bundled_nl_btn",
-    ):
-        progress = st.progress(0, text="Reading bundled JSON...")
-        status = st.empty()
-        try:
-            data = json.loads(bundled_path.read_text(encoding="utf-8"))
-            meta = data.get("metadata", {})
-            entries = data.get("entries", [])
-            progress.progress(30, text=f"Read {len(entries)} entries.")
-            status.info(
-                f"📖 Bundled JSON: {meta.get('source')} — "
-                f"v{meta.get('version')} — {len(entries)} entries."
-            )
+    if st.button("📦 Import bundled NL Annex I (2025-11)", type="primary", use_container_width=True, key="import_bundled_nl_btn"):
+        _import_bundled(bundled_nl_path, "Dutch", "NL")
 
-            version_str = f"{meta.get('version', '2025-11')}_nl_bundled"
-            existing = run_query(
-                "SELECT id FROM data_sources WHERE source_type='annex_i_text' AND version=:v",
-                {"v": version_str},
-            )
-            if existing:
-                source_id = existing[0]["id"]
-                execute("DELETE FROM manual_entries WHERE source_id=:sid", {"sid": source_id})
-                execute(
-                    "UPDATE data_sources SET row_count=:rc WHERE id=:sid",
-                    {"rc": len(entries), "sid": source_id},
-                )
-                status.info(f"♻️ Replacing rows of existing source #{source_id}.")
-            else:
-                inserted = run_query(
-                    """
-                    INSERT INTO data_sources (source_type, source_name, version, row_count, notes)
-                    VALUES ('annex_i_text', :n, :v, :rc, :notes)
-                    RETURNING id
-                    """,
-                    {
-                        "n": f"EU Annex I (NL) — {meta.get('version', '2025-11')} bundled",
-                        "v": version_str,
-                        "rc": len(entries),
-                        "notes": "Loaded from bundled JSON in repo (data/annex_i_nl_2025-11.json).",
-                    },
-                )
-                source_id = inserted[0]["id"]
+st.divider()
 
-            progress.progress(60, text=f"Inserting {len(entries)} rows...")
-            from psycopg2.extras import execute_values
-            from db.connection import get_engine
-            batch = []
-            for e in entries:
-                payload = {
-                    "code": e.get("code"),
-                    "label": e.get("label"),
-                    "category": e.get("category"),
-                    "subgroup": e.get("subgroup"),
-                    "depth": e.get("depth"),
-                    "full_content": e.get("full_content", ""),  # narrative text for free-text search
-                    "language": "NL",
-                    "regulation_version": meta.get("version"),
-                    "source": "bundled",
-                }
-                batch.append({
-                    "source_id": source_id,
-                    "entry_key": e.get("code"),
-                    "entry_label": e.get("label"),
-                    "payload": json.dumps(payload, default=str),
-                })
-            t0 = time.time()
-            engine = get_engine()
-            with engine.begin() as conn:
-                raw_conn = conn.connection
-                cur = raw_conn.cursor()
-                execute_values(
-                    cur,
-                    "INSERT INTO manual_entries (source_id, entry_key, entry_label, payload) VALUES %s",
-                    batch,
-                    template="(%(source_id)s, %(entry_key)s, %(entry_label)s, %(payload)s::jsonb)",
-                    page_size=500,
-                )
-                cur.close()
-            elapsed = time.time() - t0
+# ----------------------------------------------------------------------
+# Section 3: Load BUNDLED English Annex I
+# ----------------------------------------------------------------------
+st.subheader("🇬🇧 Import bundled English Annex I (2025-11)")
+st.caption(
+    "Pre-parsed JSON of the consolidated English text "
+    "(EUR-Lex 02021R0821-EN-15.11.2025, ~550 entries with full narrative content). "
+    "Combined with NL gives bilingual narrative coverage for cross-language search."
+)
+if not bundled_en_path.exists():
+    st.warning(f"Bundled EN file not found at {bundled_en_path}.")
+else:
+    if st.button("📦 Import bundled EN Annex I (2025-11)", type="primary", use_container_width=True, key="import_bundled_en_btn"):
+        _import_bundled(bundled_en_path, "English", "EN")
 
-            progress.progress(100, text="Done.")
-            status.success(
-                f"✓ Imported {len(batch)} NL entries in {elapsed:.1f}s (source #{source_id})."
-            )
-            time.sleep(1.5)
-            st.rerun()
-        except Exception as exc:
-            progress.empty()
-            status.empty()
-            st.error(f"Import failed: {exc}")
-            st.exception(exc)
+st.divider()
+
+# ----------------------------------------------------------------------
+# Section 4: Build embeddings for semantic search
+# ----------------------------------------------------------------------
+st.subheader("🧠 Build semantic search index")
+st.caption(
+    "Embeds all loaded entries with OpenAI `text-embedding-3-small` (1536 dim, "
+    "multilingual). One-time cost ≈ $0.01–0.02. Per-query cost ≈ $0.0000001 (effectively free)."
+)
+
+from services import annex_i as _ai
+from services import embeddings as _emb
+
+annex_stats = _ai.count_embedded_annex_items()
+manual_stats = _ai.count_embedded_manual_entries()
+
+c1, c2, c3 = st.columns(3)
+with c1:
+    st.metric(
+        "Annex I (Excel)",
+        f"{annex_stats['embedded']}/{annex_stats['total']}",
+        delta=f"{annex_stats['remaining']} to embed" if annex_stats['remaining'] else "✓ done",
+    )
+with c2:
+    st.metric(
+        "Manual entries (NL/EN TXT)",
+        f"{manual_stats['embedded']}/{manual_stats['total']}",
+        delta=f"{manual_stats['remaining']} to embed" if manual_stats['remaining'] else "✓ done",
+    )
+with c3:
+    total_remaining = annex_stats['remaining'] + manual_stats['remaining']
+    if total_remaining:
+        est = _emb.estimate_cost_for_corpus(total_remaining)
+        st.metric("Est. cost", f"${est['estimated_cost_usd']:.4f}")
+    else:
+        st.metric("Est. cost", "$0")
+
+if not os.environ.get("OPENAI_API_KEY"):
+    st.error("🔑 `OPENAI_API_KEY` is not set. Add it to .env locally or to Railway → Variables.")
+else:
+    cols = st.columns(2)
+    with cols[0]:
+        build_annex = st.button(
+            f"🧠 Embed Annex I ({annex_stats['remaining']} remaining)",
+            disabled=annex_stats['remaining'] == 0,
+            use_container_width=True,
+            key="embed_annex_btn",
+        )
+    with cols[1]:
+        build_manual = st.button(
+            f"🧠 Embed manual entries ({manual_stats['remaining']} remaining)",
+            disabled=manual_stats['remaining'] == 0,
+            use_container_width=True,
+            key="embed_manual_btn",
+        )
+
+    if build_annex:
+        rows = run_query(
+            """
+            SELECT a.id, a.code, a.label
+            FROM   annex_i_items a
+            JOIN   data_sources ds ON ds.id = a.source_id
+            WHERE  ds.is_active = TRUE
+              AND  a.code ~ '^[0-9][A-E][0-9]{3}'
+              AND  a.embedding IS NULL
+            ORDER BY a.id
+            """
+        )
+        if rows:
+            progress = st.progress(0, text=f"Embedding {len(rows)} Annex I rows...")
+            status = st.empty()
+            try:
+                texts = [
+                    f"{r['code']} {r['label']}".strip()
+                    for r in rows
+                ]
+                BATCH = 200
+                total_tokens = 0
+                total_cost = 0.0
+                t0 = time.time()
+                for i in range(0, len(rows), BATCH):
+                    chunk_rows = rows[i:i + BATCH]
+                    chunk_texts = texts[i:i + BATCH]
+                    progress.progress(
+                        min(0.99, (i + 1) / len(rows)),
+                        text=f"Embedding batch {i // BATCH + 1} / {(len(rows) - 1) // BATCH + 1}...",
+                    )
+                    result = _emb.embed_texts(chunk_texts)
+                    total_tokens += result["total_tokens"]
+                    total_cost += result["cost_usd"]
+
+                    # Update DB
+                    update_rows = []
+                    for r, vec in zip(chunk_rows, result["embeddings"]):
+                        update_rows.append({
+                            "id": r["id"],
+                            "vec": _emb.to_pg_vector_literal(vec),
+                        })
+                    for ur in update_rows:
+                        execute(
+                            """
+                            UPDATE annex_i_items
+                            SET embedding = CAST(:vec AS vector),
+                                embedding_model = :m,
+                                embedded_at = NOW()
+                            WHERE id = :id
+                            """,
+                            {"vec": ur["vec"], "m": _emb.EMBEDDING_MODEL, "id": ur["id"]},
+                        )
+
+                progress.progress(1.0, text="Done.")
+                elapsed = time.time() - t0
+                status.success(
+                    f"✓ Embedded {len(rows)} rows in {elapsed:.1f}s. "
+                    f"Tokens used: {total_tokens:,}. Cost: ${total_cost:.4f}."
+                )
+                time.sleep(2)
+                st.rerun()
+            except Exception as exc:
+                progress.empty()
+                st.error(f"Embedding failed: {exc}")
+                st.exception(exc)
+
+    if build_manual:
+        rows = run_query(
+            """
+            SELECT  me.entry_key AS code,
+                    me.entry_label AS label,
+                    me.payload AS payload,
+                    me.source_id || '_' || me.entry_key AS uid,
+                    me.source_id,
+                    me.entry_key
+            FROM    manual_entries me
+            JOIN    data_sources ds ON ds.id = me.source_id
+            WHERE   ds.is_active = TRUE
+              AND   me.embedding IS NULL
+            ORDER BY me.source_id, me.entry_key
+            """
+        )
+        if rows:
+            progress = st.progress(0, text=f"Embedding {len(rows)} manual entries...")
+            status = st.empty()
+            try:
+                # Build text from code + label + full_content (capped for cost control)
+                texts = []
+                for r in rows:
+                    p = r.get("payload") or {}
+                    if isinstance(p, str):
+                        try:
+                            p = json.loads(p)
+                        except Exception:
+                            p = {}
+                    full = (p.get("full_content") or "")[:2000] if isinstance(p, dict) else ""
+                    t = f"{r['code']} {r['label']} {full}".strip()
+                    texts.append(t)
+
+                BATCH = 100
+                total_tokens = 0
+                total_cost = 0.0
+                t0 = time.time()
+                for i in range(0, len(rows), BATCH):
+                    chunk_rows = rows[i:i + BATCH]
+                    chunk_texts = texts[i:i + BATCH]
+                    progress.progress(
+                        min(0.99, (i + 1) / len(rows)),
+                        text=f"Embedding batch {i // BATCH + 1} / {(len(rows) - 1) // BATCH + 1}...",
+                    )
+                    result = _emb.embed_texts(chunk_texts)
+                    total_tokens += result["total_tokens"]
+                    total_cost += result["cost_usd"]
+
+                    for r, vec in zip(chunk_rows, result["embeddings"]):
+                        execute(
+                            """
+                            UPDATE manual_entries
+                            SET embedding = CAST(:vec AS vector),
+                                embedding_model = :m,
+                                embedded_at = NOW()
+                            WHERE source_id = :sid AND entry_key = :ek
+                            """,
+                            {
+                                "vec": _emb.to_pg_vector_literal(vec),
+                                "m": _emb.EMBEDDING_MODEL,
+                                "sid": r["source_id"],
+                                "ek": r["entry_key"],
+                            },
+                        )
+
+                progress.progress(1.0, text="Done.")
+                elapsed = time.time() - t0
+                status.success(
+                    f"✓ Embedded {len(rows)} rows in {elapsed:.1f}s. "
+                    f"Tokens: {total_tokens:,}. Cost: ${total_cost:.4f}."
+                )
+                time.sleep(2)
+                st.rerun()
+            except Exception as exc:
+                progress.empty()
+                st.error(f"Embedding failed: {exc}")
+                st.exception(exc)
 
 
 st.divider()
 
 # ----------------------------------------------------------------------
-# Section 3: Upload Dutch (or other language) regulation text MANUALLY
+# Section 5: Upload Dutch (or other language) regulation text MANUALLY
 # ----------------------------------------------------------------------
 st.subheader("📄 Load regulation text (Dual_use.txt — Dutch / EN / FR / DE)")
 st.caption(

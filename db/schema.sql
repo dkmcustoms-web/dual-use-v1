@@ -3,11 +3,12 @@
 
 
 -- =====================================================================
--- EXTENSIONS — must come first because indices below depend on pg_trgm.
--- pg_trgm provides the trigram-similarity operators/functions used by
--- the fuzzy search on annex_i_items.label.
+-- EXTENSIONS — must come first because indices below depend on them.
+-- pg_trgm provides trigram-similarity operators for fuzzy text search.
+-- vector  provides the cosine-distance operator <=> for semantic search.
 -- =====================================================================
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE EXTENSION IF NOT EXISTS vector;
 
 
 -- =====================================================================
@@ -150,3 +151,32 @@ ALTER TABLE screenings
     ADD COLUMN IF NOT EXISTS llm_output_tokens   INTEGER,
     ADD COLUMN IF NOT EXISTS llm_risk_level      VARCHAR(20),
     ADD COLUMN IF NOT EXISTS llm_recommendation  VARCHAR(100);
+
+
+-- =====================================================================
+-- SEMANTIC SEARCH EMBEDDINGS — vector columns + HNSW indexes for
+-- cosine-similarity search via the pgvector extension.
+--
+-- Model: OpenAI text-embedding-3-small (1536 dimensions).
+-- Distance operator: <=> (cosine). similarity = 1 - distance.
+-- =====================================================================
+ALTER TABLE annex_i_items
+    ADD COLUMN IF NOT EXISTS embedding         vector(1536),
+    ADD COLUMN IF NOT EXISTS embedding_model   VARCHAR(50),
+    ADD COLUMN IF NOT EXISTS embedded_at       TIMESTAMPTZ;
+
+ALTER TABLE manual_entries
+    ADD COLUMN IF NOT EXISTS embedding         vector(1536),
+    ADD COLUMN IF NOT EXISTS embedding_model   VARCHAR(50),
+    ADD COLUMN IF NOT EXISTS embedded_at       TIMESTAMPTZ;
+
+-- HNSW indexes for fast nearest-neighbour search.
+-- Created on partial sets (WHERE embedding IS NOT NULL) so they don't
+-- block when no rows are embedded yet.
+CREATE INDEX IF NOT EXISTS idx_annex_i_embedding
+    ON annex_i_items USING hnsw (embedding vector_cosine_ops)
+    WITH (m = 16, ef_construction = 64);
+
+CREATE INDEX IF NOT EXISTS idx_manual_entries_embedding
+    ON manual_entries USING hnsw (embedding vector_cosine_ops)
+    WITH (m = 16, ef_construction = 64);
