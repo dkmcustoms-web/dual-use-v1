@@ -373,167 +373,216 @@ with col_thr:
     )
 
 
-if search_clicked and (query.strip() or exact_code.strip()):
+# ----------------------------------------------------------------------
+# Session-state init — search results + verdict must survive reruns
+# (Streamlit buttons are one-shot: their True state is gone after a click)
+# ----------------------------------------------------------------------
+if "last_search" not in st.session_state:
+    st.session_state.last_search = None
+if "last_verdict" not in st.session_state:
+    st.session_state.last_verdict = None
 
-    if exact_code.strip():
-        item = annex_i.get_by_code(exact_code.strip())
-        if item:
-            st.success(f"Exact match for `{item['code']}`")
-            with st.container(border=True):
-                st.markdown(f"### `{item['code']}`")
-                st.write(item["label"])
-                children = annex_i.get_children(item["id"])
-                if children:
-                    st.markdown(f"**Sub-entries ({len(children)}):**")
-                    for c in children:
-                        st.markdown(f"- `{c['code']}` — {c['label']}")
+
+# ----------------------------------------------------------------------
+# Step 1: when Search button is clicked, RUN the search and store results
+# ----------------------------------------------------------------------
+if search_clicked and query.strip():
+    q = query.strip()
+    with st.spinner("Searching…"):
+        trigram_hits = run_trigram_search(q) if "trigram" in routes_enabled else []
+        ilike_hits = run_ilike_search(q) if "ilike" in routes_enabled else []
+        if "semantic" in routes_enabled:
+            sem = run_semantic_search(q, min_sim=min_sem)
+            sem_annex = sem["annex"]
+            sem_manual = sem["manual"]
+            sem_err = sem["error"]
+            sem_cost = sem["cost"]
         else:
-            st.warning(f"No entry with code `{exact_code}`.")
-
-    if query.strip():
-        q = query.strip()
-
-        with st.spinner("Searching…"):
-            trigram_hits = run_trigram_search(q) if "trigram" in routes_enabled else []
-            ilike_hits = run_ilike_search(q) if "ilike" in routes_enabled else []
-            if "semantic" in routes_enabled:
-                sem = run_semantic_search(q, min_sim=min_sem)
-                sem_annex = sem["annex"]
-                sem_manual = sem["manual"]
-                sem_err = sem["error"]
-                sem_cost = sem["cost"]
-            else:
-                sem_annex, sem_manual, sem_err, sem_cost = [], [], None, None
-
-        if sem_err:
-            st.warning(f"Semantic search skipped: {sem_err}")
+            sem_annex, sem_manual, sem_err, sem_cost = [], [], None, None
 
         merged = merge_results(trigram_hits, ilike_hits, sem_annex, sem_manual)
 
-        # Summary metrics
-        c1, c2, c3, c4 = st.columns(4)
-        c1.metric("Trigram hits", len(trigram_hits))
-        c2.metric("ILIKE hits", len(ilike_hits))
-        c3.metric("Semantic hits", len(sem_annex) + len(sem_manual))
-        c4.metric("Unique results", len(merged))
+    st.session_state.last_search = {
+        "query": q,
+        "trigram_hits": trigram_hits,
+        "ilike_hits": ilike_hits,
+        "sem_annex": sem_annex,
+        "sem_manual": sem_manual,
+        "sem_err": sem_err,
+        "sem_cost": sem_cost,
+        "merged": merged,
+        "routes_enabled": list(routes_enabled),
+    }
+    # New search invalidates any previous verdict
+    st.session_state.last_verdict = None
 
-        if sem_cost and sem_cost.get("usd"):
-            st.caption(f"💰 Semantic query cost: ~${sem_cost['usd']:.6f} USD")
 
-        if not merged:
-            st.info("No results across any route. Try a broader term or lower the semantic threshold.")
-        else:
-            # =========================================================
-            # AI compliance verdict — focused per-product Q&A on top hits
-            # =========================================================
-            st.divider()
-            st.subheader("🤖 AI compliance verdict")
+# ----------------------------------------------------------------------
+# Step 2: exact-code lookup (renders inline, no session state needed)
+# ----------------------------------------------------------------------
+if search_clicked and exact_code.strip():
+    item = annex_i.get_by_code(exact_code.strip())
+    if item:
+        st.success(f"Exact match for `{item['code']}`")
+        with st.container(border=True):
+            st.markdown(f"### `{item['code']}`")
+            st.write(item["label"])
+            children = annex_i.get_children(item["id"])
+            if children:
+                st.markdown(f"**Sub-entries ({len(children)}):**")
+                for c in children:
+                    st.markdown(f"- `{c['code']}` — {c['label']}")
+    else:
+        st.warning(f"No entry with code `{exact_code}`.")
+
+
+# ----------------------------------------------------------------------
+# Step 3: render search results from session state (survives reruns)
+# ----------------------------------------------------------------------
+if st.session_state.last_search:
+    s = st.session_state.last_search
+    q = s["query"]
+    trigram_hits = s["trigram_hits"]
+    ilike_hits = s["ilike_hits"]
+    sem_annex = s["sem_annex"]
+    sem_manual = s["sem_manual"]
+    sem_err = s["sem_err"]
+    sem_cost = s["sem_cost"]
+    merged = s["merged"]
+
+    if sem_err:
+        st.warning(f"Semantic search skipped: {sem_err}")
+
+    # Summary metrics
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Trigram hits", len(trigram_hits))
+    c2.metric("ILIKE hits", len(ilike_hits))
+    c3.metric("Semantic hits", len(sem_annex) + len(sem_manual))
+    c4.metric("Unique results", len(merged))
+
+    if sem_cost and sem_cost.get("usd"):
+        st.caption(f"💰 Semantic query cost: ~${sem_cost['usd']:.6f} USD")
+
+    if not merged:
+        st.info("No results across any route. Try a broader term or lower the semantic threshold.")
+    else:
+        # =========================================================
+        # AI compliance verdict — focused per-product Q&A on top hits
+        # =========================================================
+        st.divider()
+        st.subheader("🤖 AI compliance verdict")
+        st.caption(
+            "Get a plain-language compliance assessment based on the top hits. "
+            "Useful when the hit-list alone doesn't tell you whether the product is controlled."
+        )
+
+        verdict_col1, verdict_col2 = st.columns([1, 3])
+        with verdict_col1:
+            verdict_clicked = st.button(
+                "🤖 Get verdict from Claude",
+                type="primary",
+                use_container_width=True,
+                disabled=not os.environ.get("ANTHROPIC_API_KEY"),
+                key="verdict_btn",
+            )
+        with verdict_col2:
+            top_n = min(8, len(merged))
             st.caption(
-                "Get a plain-language compliance assessment based on the top hits. "
-                "Useful when the hit-list alone doesn't tell you whether the product is controlled."
+                f"Will send top {top_n} hits to Claude. "
+                f"Est. cost ~$0.005-0.02 per call (Sonnet, ~3k input / ~500 output)."
+            )
+            if not os.environ.get("ANTHROPIC_API_KEY"):
+                st.warning("ANTHROPIC_API_KEY not set — button disabled.")
+
+        # When clicked: run Claude ONCE, store result in session state
+        if verdict_clicked:
+            from services import llm_review as _llmr
+            import time as _time
+
+            top_candidates = []
+            for hit in merged[:8]:
+                top_candidates.append({
+                    "code": hit["code"],
+                    "label": hit.get("label", ""),
+                    "parent_code": hit.get("parent_code"),
+                    "parent_label": hit.get("parent_label"),
+                    "language": hit.get("language"),
+                    "manual_payload": hit.get("manual_payload"),
+                })
+
+            with st.spinner("Claude is analyzing the top hits..."):
+                t0 = _time.time()
+                try:
+                    verdict = _llmr.run_product_verdict(q, top_candidates)
+                    verdict["elapsed"] = _time.time() - t0
+                    verdict["candidate_codes"] = [c["code"] for c in top_candidates]
+                except Exception as exc:
+                    st.error(f"Verdict failed: {exc}")
+                    st.exception(exc)
+                    verdict = None
+
+            if verdict:
+                # Persist to audit trail ONCE
+                inputs_json = _json.dumps({
+                    "query": q,
+                    "candidate_codes": verdict["candidate_codes"],
+                    "candidates_used": verdict.get("candidates_used", len(top_candidates)),
+                    "routes_enabled": s["routes_enabled"],
+                })
+                try:
+                    run_query(
+                        """
+                        INSERT INTO screenings
+                            (screening_type, inputs, summary_status, summary_text,
+                             llm_model, llm_raw_response,
+                             llm_input_tokens, llm_output_tokens)
+                        VALUES
+                            ('product_verdict', CAST(:inp AS JSONB), :ss, :stx,
+                             :model, :raw, :it, :ot)
+                        """,
+                        {
+                            "inp": inputs_json,
+                            "ss": "verdict",
+                            "stx": f"Product verdict for: {q[:80]}",
+                            "model": verdict["model"],
+                            "raw": verdict["verdict_text"],
+                            "it": verdict["input_tokens"],
+                            "ot": verdict["output_tokens"],
+                        },
+                    )
+                    verdict["audit_logged"] = True
+                except Exception as exc:
+                    verdict["audit_logged"] = False
+                    verdict["audit_error"] = str(exc)
+
+                st.session_state.last_verdict = verdict
+
+        # Render the verdict from session state (survives the next rerun)
+        if st.session_state.last_verdict:
+            v = st.session_state.last_verdict
+            from services import llm_review as _llmr
+            cost = _llmr.calculate_cost(
+                v["model"], v["input_tokens"], v["output_tokens"]
             )
 
-            verdict_col1, verdict_col2 = st.columns([1, 3])
-            with verdict_col1:
-                verdict_clicked = st.button(
-                    "🤖 Get verdict from Claude",
-                    type="primary",
-                    use_container_width=True,
-                    disabled=not os.environ.get("ANTHROPIC_API_KEY"),
-                    key="verdict_btn",
-                )
-            with verdict_col2:
-                top_n = min(8, len(merged))
-                st.caption(
-                    f"Will send top {top_n} hits to Claude. "
-                    f"Est. cost ~$0.005-0.02 per call (Sonnet, ~3k input / ~500 output)."
-                )
-                if not os.environ.get("ANTHROPIC_API_KEY"):
-                    st.warning("ANTHROPIC_API_KEY not set — button disabled.")
+            with st.container(border=True):
+                st.markdown(v["verdict_text"])
 
-            if verdict_clicked:
-                from services import llm_review as _llmr
+            mc1, mc2, mc3, mc4 = st.columns(4)
+            mc1.metric("Model", v["model"].replace("claude-", ""))
+            mc2.metric("Tokens", f"{v['input_tokens']} → {v['output_tokens']}")
+            if cost:
+                mc3.metric("Cost (USD)", f"${cost['total_usd']:.4f}")
+            else:
+                mc3.metric("Cost", "?")
+            mc4.metric("Latency", f"{v.get('elapsed', 0):.1f}s")
 
-                # Collect top candidates for Claude (with full_content where available)
-                top_candidates = []
-                for hit in merged[:8]:
-                    top_candidates.append({
-                        "code": hit["code"],
-                        "label": hit.get("label", ""),
-                        "parent_code": hit.get("parent_code"),
-                        "parent_label": hit.get("parent_label"),
-                        "language": hit.get("language"),
-                        "manual_payload": hit.get("manual_payload"),
-                    })
+            if v.get("audit_logged"):
+                st.caption("✓ Verdict logged to audit trail.")
+            elif "audit_error" in v:
+                st.caption(f"_(audit log failed: {v['audit_error']})_")
 
-                with st.spinner("Claude is analyzing the top hits..."):
-                    t0 = __import__("time").time()
-                    try:
-                        verdict = _llmr.run_product_verdict(q, top_candidates)
-                    except Exception as exc:
-                        st.error(f"Verdict failed: {exc}")
-                        st.exception(exc)
-                        verdict = None
-                    elapsed = __import__("time").time() - t0
-
-                if verdict:
-                    cost = _llmr.calculate_cost(
-                        verdict["model"],
-                        verdict["input_tokens"],
-                        verdict["output_tokens"],
-                    )
-
-                    # Pretty rendered verdict
-                    with st.container(border=True):
-                        st.markdown(verdict["verdict_text"])
-
-                    # Compact metrics
-                    mc1, mc2, mc3, mc4 = st.columns(4)
-                    mc1.metric("Model", verdict["model"].replace("claude-", ""))
-                    mc2.metric(
-                        "Tokens",
-                        f"{verdict['input_tokens']} → {verdict['output_tokens']}",
-                    )
-                    if cost:
-                        mc3.metric("Cost (USD)", f"${cost['total_usd']:.4f}")
-                    else:
-                        mc3.metric("Cost", "?")
-                    mc4.metric("Latency", f"{elapsed:.1f}s")
-
-                    # Persist to audit trail
-                    candidate_codes = [c["code"] for c in top_candidates]
-                    inputs_json = _json.dumps({
-                        "query": q,
-                        "candidate_codes": candidate_codes,
-                        "candidates_used": verdict.get("candidates_used", len(top_candidates)),
-                        "routes_enabled": routes_enabled,
-                    })
-                    try:
-                        run_query(
-                            """
-                            INSERT INTO screenings
-                                (screening_type, inputs, summary_status, summary_text,
-                                 llm_model, llm_raw_response,
-                                 llm_input_tokens, llm_output_tokens)
-                            VALUES
-                                ('product_verdict', CAST(:inp AS JSONB), :ss, :stx,
-                                 :model, :raw, :it, :ot)
-                            """,
-                            {
-                                "inp": inputs_json,
-                                "ss": "verdict",
-                                "stx": f"Product verdict for: {q[:80]}",
-                                "model": verdict["model"],
-                                "raw": verdict["verdict_text"],
-                                "it": verdict["input_tokens"],
-                                "ot": verdict["output_tokens"],
-                            },
-                        )
-                        st.caption("✓ Verdict logged to audit trail.")
-                    except Exception as exc:
-                        st.caption(f"_(audit log failed: {exc})_")
-
-            st.divider()
-            st.subheader(f"📊 Ranked results ({min(len(merged), 30)} of {len(merged)})")
-            for hit in merged[:30]:
-                render_hit(hit, q)
+        st.divider()
+        st.subheader(f"📊 Ranked results ({min(len(merged), 30)} of {len(merged)})")
+        for hit in merged[:30]:
+            render_hit(hit, q)
