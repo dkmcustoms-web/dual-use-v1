@@ -423,6 +423,117 @@ if search_clicked and (query.strip() or exact_code.strip()):
         if not merged:
             st.info("No results across any route. Try a broader term or lower the semantic threshold.")
         else:
+            # =========================================================
+            # AI compliance verdict — focused per-product Q&A on top hits
+            # =========================================================
+            st.divider()
+            st.subheader("🤖 AI compliance verdict")
+            st.caption(
+                "Get a plain-language compliance assessment based on the top hits. "
+                "Useful when the hit-list alone doesn't tell you whether the product is controlled."
+            )
+
+            verdict_col1, verdict_col2 = st.columns([1, 3])
+            with verdict_col1:
+                verdict_clicked = st.button(
+                    "🤖 Get verdict from Claude",
+                    type="primary",
+                    use_container_width=True,
+                    disabled=not os.environ.get("ANTHROPIC_API_KEY"),
+                    key="verdict_btn",
+                )
+            with verdict_col2:
+                top_n = min(8, len(merged))
+                st.caption(
+                    f"Will send top {top_n} hits to Claude. "
+                    f"Est. cost ~$0.005-0.02 per call (Sonnet, ~3k input / ~500 output)."
+                )
+                if not os.environ.get("ANTHROPIC_API_KEY"):
+                    st.warning("ANTHROPIC_API_KEY not set — button disabled.")
+
+            if verdict_clicked:
+                from services import llm_review as _llmr
+
+                # Collect top candidates for Claude (with full_content where available)
+                top_candidates = []
+                for hit in merged[:8]:
+                    top_candidates.append({
+                        "code": hit["code"],
+                        "label": hit.get("label", ""),
+                        "parent_code": hit.get("parent_code"),
+                        "parent_label": hit.get("parent_label"),
+                        "language": hit.get("language"),
+                        "manual_payload": hit.get("manual_payload"),
+                    })
+
+                with st.spinner("Claude is analyzing the top hits..."):
+                    t0 = __import__("time").time()
+                    try:
+                        verdict = _llmr.run_product_verdict(q, top_candidates)
+                    except Exception as exc:
+                        st.error(f"Verdict failed: {exc}")
+                        st.exception(exc)
+                        verdict = None
+                    elapsed = __import__("time").time() - t0
+
+                if verdict:
+                    cost = _llmr.calculate_cost(
+                        verdict["model"],
+                        verdict["input_tokens"],
+                        verdict["output_tokens"],
+                    )
+
+                    # Pretty rendered verdict
+                    with st.container(border=True):
+                        st.markdown(verdict["verdict_text"])
+
+                    # Compact metrics
+                    mc1, mc2, mc3, mc4 = st.columns(4)
+                    mc1.metric("Model", verdict["model"].replace("claude-", ""))
+                    mc2.metric(
+                        "Tokens",
+                        f"{verdict['input_tokens']} → {verdict['output_tokens']}",
+                    )
+                    if cost:
+                        mc3.metric("Cost (USD)", f"${cost['total_usd']:.4f}")
+                    else:
+                        mc3.metric("Cost", "?")
+                    mc4.metric("Latency", f"{elapsed:.1f}s")
+
+                    # Persist to audit trail
+                    candidate_codes = [c["code"] for c in top_candidates]
+                    inputs_json = _json.dumps({
+                        "query": q,
+                        "candidate_codes": candidate_codes,
+                        "candidates_used": verdict.get("candidates_used", len(top_candidates)),
+                        "routes_enabled": routes_enabled,
+                    })
+                    try:
+                        run_query(
+                            """
+                            INSERT INTO screenings
+                                (screening_type, inputs, summary_status, summary_text,
+                                 llm_model, llm_raw_response,
+                                 llm_input_tokens, llm_output_tokens)
+                            VALUES
+                                ('product_verdict', CAST(:inp AS JSONB), :ss, :stx,
+                                 :model, :raw, :it, :ot)
+                            """,
+                            {
+                                "inp": inputs_json,
+                                "ss": "verdict",
+                                "stx": f"Product verdict for: {q[:80]}",
+                                "model": verdict["model"],
+                                "raw": verdict["verdict_text"],
+                                "it": verdict["input_tokens"],
+                                "ot": verdict["output_tokens"],
+                            },
+                        )
+                        st.caption("✓ Verdict logged to audit trail.")
+                    except Exception as exc:
+                        st.caption(f"_(audit log failed: {exc})_")
+
+            st.divider()
             st.subheader(f"📊 Ranked results ({min(len(merged), 30)} of {len(merged)})")
             for hit in merged[:30]:
                 render_hit(hit, q)

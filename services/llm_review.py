@@ -503,3 +503,131 @@ def calculate_cost(
         "rate_in":  rates["input"],
         "rate_out": rates["output"],
     }
+
+
+# ---------------------------------------------------------------------
+# Product verdict — focused per-product compliance Q&A
+# Different from the full shipment review: takes a search term + the
+# top hybrid-search candidates, returns ONE readable paragraph + a
+# short verification checklist. ~150 words, written for a Belgian
+# operator. Costs ~$0.005-0.02 per call (Sonnet, ~3k in / ~600 out).
+# ---------------------------------------------------------------------
+PRODUCT_VERDICT_SYSTEM_PROMPT = """Je bent een Belgische compliance assistent voor EU export controls (dual-use \
+Verordening 2021/821, Annex I). Een operator zoekt een product op in de dual-use \
+database en wil weten of het mogelijk gecontroleerd is.
+
+Je krijgt:
+- De zoekterm van de operator
+- De top kandidaat ECN-codes uit Annex I (uit hybrid search), met labels en — \
+waar beschikbaar — de volledige Annex I tekst van die entry
+
+Je doel: een leesbaar, praktisch antwoord van ~150 woorden gevolgd door een korte \
+verificatielijst en de relevante codes.
+
+FORMAT van je antwoord (gewone Markdown, geen JSON, geen extra titels boven de paragraaf):
+
+[Eén leesbaar paragraaf van max 180 woorden:
+ - Begin met de samenvattende conclusie: wel/niet dual-use, en welke voorwaarden bepalen dat
+ - Noem het kernonderscheid dat bepaalt of het gecontroleerd is (bv. type apparaat, technische spec, eindgebruik)
+ - Vermeld de meest relevante ECN-code(s) inline (bv. "valt onder 8A002.q als rebreather")
+ - Indien relevant: vermeld catch-all artikel 4 van 2021/821 of de Militaire Goederenlijst
+ - Vermijd "het hangt af van" zonder concrete voorbeelden te geven]
+
+**Verificatievragen voor de exporteur:**
+- [3 tot 5 specifieke vragen die de operator MOET stellen om vergunningplicht vast te stellen. \
+Concreet, niet vaag. Bijvoorbeeld: "Is dit een rebreather (gesloten of half-gesloten circuit) of een gewone open-circuit aqualung?"]
+
+**Relevante ECN-codes:**
+- `CODE` — korte uitleg in één zin
+- `CODE` — korte uitleg in één zin
+
+BELANGRIJK:
+- Schrijf in het Nederlands (operator is Belgisch)
+- Praktisch, geen juridisch jargon
+- Verwijs nooit naar ECN-codes die NIET in de kandidatenlijst staan — die ken je niet en kan je niet bevestigen
+- Geen juridisch advies, alleen compliance-guidance
+- Als de zoekterm te vaag is voor een conclusie, zeg dat eerlijk en stel betere zoektermen voor
+- De kandidaten kunnen Engels of Nederlands zijn — gebruik beide om context op te bouwen, maar antwoord in NL
+"""
+
+
+def run_product_verdict(
+    query: str,
+    candidates: list[dict],
+    model: str = "claude-sonnet-4-6",
+    max_tokens: int = 1500,
+) -> dict:
+    """Get a focused compliance verdict for a single product query.
+
+    Args:
+        query: the user's search term (NL or EN)
+        candidates: list of dicts; each should have at least
+                    {code, label, full_content?, parent_code?, parent_label?, language?}
+        model: Anthropic model id
+        max_tokens: cap on output
+
+    Returns dict with: verdict_text, model, input_tokens, output_tokens, stop_reason.
+    Raises if ANTHROPIC_API_KEY is missing or the call fails.
+    """
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        raise RuntimeError("ANTHROPIC_API_KEY is not set.")
+    try:
+        import anthropic
+    except ImportError as exc:
+        raise RuntimeError("anthropic package not installed.") from exc
+
+    # Build the candidate block, capping each entry's full_content
+    block_parts = []
+    for i, c in enumerate(candidates[:10], start=1):
+        code = c.get("code") or "?"
+        label = c.get("label") or ""
+        lang = c.get("language") or ("EN" if not c.get("manual_payload") else "?")
+        parent = ""
+        if c.get("parent_code") and c.get("parent_code") != code:
+            parent = f" (parent: `{c['parent_code']}` {(c.get('parent_label') or '')[:80]})"
+        chunk = f"### Kandidaat {i}: `{code}` [{lang}]{parent}\n**Label:** {label}\n"
+        # Full content from manual_entries (NL/EN TXT) — cap at 1500 chars per entry
+        full = ""
+        payload = c.get("manual_payload")
+        if isinstance(payload, dict):
+            full = payload.get("full_content", "") or ""
+        elif c.get("full_content"):
+            full = c["full_content"]
+        if full:
+            full = full[:1500]
+            chunk += f"**Annex I content excerpt:**\n{full}\n"
+        block_parts.append(chunk)
+
+    candidate_block = "\n\n".join(block_parts) if block_parts else "(geen kandidaten gevonden — zoekterm matchte niets)"
+
+    user_msg = (
+        f"**Zoekterm van de operator:** {query}\n\n"
+        f"**Top kandidaat ECN-codes uit hybrid search:**\n\n"
+        f"{candidate_block}\n\n"
+        f"Geef de operator een compliance-verdict voor deze zoekterm."
+    )
+
+    client = anthropic.Anthropic()
+    response = client.messages.create(
+        model=model,
+        max_tokens=max_tokens,
+        temperature=0.0,
+        system=PRODUCT_VERDICT_SYSTEM_PROMPT,
+        messages=[{"role": "user", "content": user_msg}],
+    )
+
+    text = ""
+    for block in response.content:
+        if getattr(block, "type", None) == "text":
+            text += block.text
+        elif hasattr(block, "text"):
+            text += block.text
+
+    return {
+        "verdict_text": text,
+        "model": response.model,
+        "input_tokens": response.usage.input_tokens,
+        "output_tokens": response.usage.output_tokens,
+        "stop_reason": response.stop_reason,
+        "candidates_used": len(block_parts),
+    }
