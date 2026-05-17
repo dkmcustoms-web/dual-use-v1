@@ -631,3 +631,127 @@ def run_product_verdict(
         "stop_reason": response.stop_reason,
         "candidates_used": len(block_parts),
     }
+
+
+# =====================================================================
+# WEB-AUGMENTED REVIEW — same prompt + Anthropic web_search tool
+# =====================================================================
+
+# Whitelist of official sources Claude may consult. Aligns with the
+# system prompt's "ONLY use official sources" rule. No Wikipedia,
+# no Reddit, no random blogs. Domains are matched as suffixes by
+# Anthropic, so "europa.eu" covers all subdomains.
+OFFICIAL_DOMAINS = [
+    "eur-lex.europa.eu",
+    "sanctionsmap.eu",
+    "policy.trade.ec.europa.eu",
+    "ec.europa.eu",
+    "europa.eu",
+    "finance.belgium.be",
+    "fin.belgium.be",
+    "tarief.douane.nl",
+    "douane.nl",
+    "ofac.treasury.gov",
+    "sanctionssearch.ofac.treas.gov",
+    "treasury.gov",
+    "gov.uk",
+    "ofsi.hmtreasury.gov.uk",
+    "un.org",
+    "sanctionsmap.eu",
+]
+
+# Anthropic web_search pricing — $10 per 1000 searches (Mar 2026)
+WEB_SEARCH_PRICE_USD_PER_SEARCH = 10.0 / 1000
+
+
+def run_llm_review_web_augmented(
+    prompt: dict,
+    user_context: str,
+    max_searches: int = 5,
+) -> dict:
+    """Run a compliance review WITH the Anthropic web_search tool enabled.
+
+    Constrained to OFFICIAL_DOMAINS so Claude can't cite Wikipedia or blogs.
+    Returns same shape as run_llm_review plus citations and search_queries.
+    """
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        raise RuntimeError("ANTHROPIC_API_KEY is not set.")
+    try:
+        import anthropic
+    except ImportError as exc:
+        raise RuntimeError("anthropic package not installed.") from exc
+
+    client = anthropic.Anthropic()
+    response = client.messages.create(
+        model=prompt["model"],
+        max_tokens=int(prompt.get("max_tokens", 4000)),
+        temperature=float(prompt.get("temperature", 0.0)),
+        system=prompt["system_prompt"],
+        messages=[{"role": "user", "content": user_context}],
+        tools=[{
+            "type": "web_search_20250305",
+            "name": "web_search",
+            "max_uses": max_searches,
+            "allowed_domains": OFFICIAL_DOMAINS,
+        }],
+    )
+
+    # Parse content blocks defensively — Anthropic returns a mix of
+    # text, server_tool_use (Claude's searches), and web_search_tool_result.
+    text_parts: list[str] = []
+    citations: list[dict] = []
+    search_queries: list[str] = []
+    searches_used = 0
+
+    for block in response.content:
+        btype = getattr(block, "type", None)
+
+        if btype == "text":
+            text_parts.append(getattr(block, "text", ""))
+            # Citations are on each text block in newer Anthropic responses
+            block_citations = getattr(block, "citations", None) or []
+            for cite in block_citations:
+                citations.append({
+                    "url":          getattr(cite, "url", None),
+                    "title":        getattr(cite, "title", None),
+                    "cited_text":   getattr(cite, "cited_text", None),
+                    "encrypted_index": getattr(cite, "encrypted_index", None),
+                })
+
+        elif btype == "server_tool_use":
+            if getattr(block, "name", None) == "web_search":
+                searches_used += 1
+                inp = getattr(block, "input", {}) or {}
+                q = inp.get("query") if isinstance(inp, dict) else None
+                if q:
+                    search_queries.append(q)
+
+        elif btype == "web_search_tool_result":
+            # The actual results — already consumed by Claude. We don't
+            # need to re-parse them for our use case.
+            pass
+
+        else:
+            # Fallback for text-like blocks of unknown type
+            if hasattr(block, "text") and not text_parts:
+                text_parts.append(block.text)
+
+    raw_text = "\n".join(t for t in text_parts if t)
+    parsed = parse_structured_response(raw_text)
+
+    return {
+        "raw_response":     raw_text,
+        "model":            response.model,
+        "input_tokens":     response.usage.input_tokens,
+        "output_tokens":    response.usage.output_tokens,
+        "stop_reason":      response.stop_reason,
+        "citations":        citations,
+        "search_queries":   search_queries,
+        "searches_used":    searches_used,
+        **parsed,
+    }
+
+
+def calculate_web_search_cost(searches_used: int) -> float:
+    """Cost of Anthropic web_search tool calls (separate from token cost)."""
+    return round((searches_used or 0) * WEB_SEARCH_PRICE_USD_PER_SEARCH, 6)
