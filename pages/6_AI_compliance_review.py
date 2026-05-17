@@ -309,22 +309,56 @@ def _render_review_metrics(rev: dict, label: str, extra_cost_usd: float = 0.0):
         c4.metric("Latency", f"{rev.get('elapsed', 0):.1f}s")
 
 
-def _render_review_body(rev: dict):
-    """Render the structured sections of a review (or raw if not structured)."""
+def _render_summary_card(rev: dict):
+    """Prominent summary box at the top — Summary section + Recommendation.
+
+    Pulls the 'Summary' and 'Recommendation' sections out of the structured
+    response so the operator sees the conclusion before scrolling.
+    """
+    sections = llm_review.extract_sections(rev["raw_response"])
+    risk = (rev.get("risk_level") or "").upper()
+    reco = rev.get("recommendation") or "—"
+    summary_text = sections.get("Summary", "").strip() if "_full" not in sections else ""
+
+    with st.container(border=True):
+        # Big risk + recommendation header
+        st.markdown(
+            f"### {_risk_emoji(risk)} {risk or 'UNKNOWN'} — *{reco}*"
+        )
+        if summary_text:
+            st.markdown(summary_text)
+        elif "_full" in sections:
+            # Response wasn't structured — show first 500 chars as summary
+            preview = sections["_full"][:600]
+            st.markdown(preview + ("…" if len(sections["_full"]) > 600 else ""))
+
+
+def _render_review_body(rev: dict, skip_summary: bool = True):
+    """Render the structured sections of a review.
+
+    By default skips 'Summary' because it's shown in the summary card above.
+    Falls back to full raw response if structure couldn't be parsed.
+    """
     sections = llm_review.extract_sections(rev["raw_response"])
     if "_full" in sections:
-        st.markdown(sections["_full"])
-    else:
-        ordered = [
-            "Summary", "Risk Level", "Findings", "Sanctions Analysis",
-            "Missing Information", "Recommendation", "Legal Basis",
-        ]
-        for title in ordered:
-            body = sections.get(title, "").strip()
-            if body:
-                with st.container(border=True):
-                    st.markdown(f"**{title}**")
-                    st.markdown(body)
+        # Already shown in summary card if skip_summary, so only show if not
+        if not skip_summary:
+            st.markdown(sections["_full"])
+        return
+
+    ordered = [
+        "Risk Level", "Findings", "Sanctions Analysis",
+        "Missing Information", "Recommendation", "Legal Basis",
+    ]
+    if not skip_summary:
+        ordered = ["Summary"] + ordered
+
+    for title in ordered:
+        body = sections.get(title, "").strip()
+        if body:
+            with st.container(border=True):
+                st.markdown(f"**{title}**")
+                st.markdown(body)
 
 
 if st.session_state.review_local:
@@ -332,7 +366,7 @@ if st.session_state.review_local:
 
     st.divider()
 
-    # If web review exists → side-by-side, otherwise full width
+    # If web review exists → side-by-side, otherwise single column with web-augment offer
     if st.session_state.review_web:
         web = st.session_state.review_web
         web_search_cost = llm_review.calculate_web_search_cost(web.get("searches_used", 0))
@@ -341,7 +375,9 @@ if st.session_state.review_local:
         with left:
             _render_review_metrics(local, "Local review (training only)")
             st.caption(f"⏱ {local.get('elapsed', 0):.1f}s · 🚫 no internet")
-            _render_review_body(local)
+            _render_summary_card(local)
+            with st.expander("📋 Show detailed analysis", expanded=False):
+                _render_review_body(local)
 
         with right:
             _render_review_metrics(web, "Web-augmented review", extra_cost_usd=web_search_cost)
@@ -350,12 +386,12 @@ if st.session_state.review_local:
                 f"🌐 {web.get('searches_used', 0)} web searches "
                 f"(${web_search_cost:.4f})"
             )
-            _render_review_body(web)
+            _render_summary_card(web)
 
-            # Citations from web search
+            # Citations from web search — close to summary
             citations = web.get("citations") or []
             if citations:
-                with st.expander(f"📎 {len(citations)} citations from official sources"):
+                with st.expander(f"📎 {len(citations)} citations from official sources", expanded=False):
                     seen_urls = set()
                     for cite in citations:
                         url = cite.get("url")
@@ -367,24 +403,30 @@ if st.session_state.review_local:
                         cited = cite.get("cited_text")
                         if cited:
                             st.caption(f"_« {cited[:200]}{'…' if len(cited) > 200 else ''} »_")
-            else:
-                st.caption("_(Claude did not cite specific sources)_")
 
-            # Search queries Claude ran
             queries = web.get("search_queries") or []
             if queries:
-                with st.expander(f"🔍 {len(queries)} search queries Claude ran"):
+                with st.expander(f"🔍 {len(queries)} search queries Claude ran", expanded=False):
                     for q in queries:
                         st.markdown(f"- `{q}`")
 
+            with st.expander("📋 Show detailed analysis", expanded=False):
+                _render_review_body(web)
+
     else:
-        # Single column (local only)
+        # =================================================================
+        # SINGLE COLUMN: local only — summary first, then web-augment offer,
+        # then detailed body in an expander.
+        # =================================================================
+
+        # 1. Metrics row (always visible)
         _render_review_metrics(local, "Local review (training only)")
         st.caption(f"⏱ {local.get('elapsed', 0):.1f}s · 🚫 no internet — Claude's training knowledge")
-        _render_review_body(local)
 
-        # Web augmentation offer
-        st.divider()
+        # 2. Summary card — prominent, top of fold
+        _render_summary_card(local)
+
+        # 3. Web-augment offer — right under summary, NOT at page bottom
         wcol1, wcol2 = st.columns([1, 2])
         with wcol1:
             web_clicked = st.button(
@@ -395,12 +437,16 @@ if st.session_state.review_local:
             )
         with wcol2:
             st.caption(
-                f"Re-runs the same prompt with Anthropic web search enabled, "
-                f"constrained to {len(llm_review.OFFICIAL_DOMAINS)} official "
-                f"domains (EUR-Lex, OFAC, EU sanctions map, etc). "
-                f"~$0.05-0.15 extra · ~10-20s extra."
+                f"Re-runs with Anthropic web search on {len(llm_review.OFFICIAL_DOMAINS)} "
+                "official domains (EUR-Lex, OFAC, EU sanctions map, etc). "
+                "~$0.05-0.15 extra · ~10-20s extra."
             )
 
+        # 4. Detailed analysis in expander (collapsed by default)
+        with st.expander("📋 Show detailed analysis (Findings, Sanctions, Legal Basis, …)", expanded=False):
+            _render_review_body(local)
+
+        # Handle the web-augment button click
         if web_clicked:
             with st.spinner("Running web-augmented review (Claude is searching official sources)..."):
                 t0 = time.time()
@@ -418,7 +464,6 @@ if st.session_state.review_local:
                 )
                 web_result["cost"] = web_cost
 
-                # Update the existing screening row with web columns
                 if st.session_state.review_screening_id:
                     try:
                         execute(
