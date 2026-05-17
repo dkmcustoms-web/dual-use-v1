@@ -415,6 +415,13 @@ def parse_structured_response(text: str) -> dict[str, Any]:
 def extract_sections(text: str) -> dict[str, str]:
     """Split the response into the 7 sections the prompt mandates.
 
+    Handles Claude's typical formatting:
+      "## 1. Summary\n..."
+      "**Risk Level:**\n..."
+      "3. Findings:\n..."
+      "Summary\n..."
+    All of those should be recognized as section starts.
+
     Used for nicer rendering. Falls back to a single 'full' section if the
     LLM didn't follow the structure.
     """
@@ -427,11 +434,20 @@ def extract_sections(text: str) -> dict[str, str]:
         "Recommendation",
         "Legal Basis",
     ]
-    # Build a regex that splits on numbered or unnumbered section headers
+    # Build a regex that splits on section headers. Allows for optional:
+    #   - markdown header prefix (##, ###, etc)
+    #   - markdown bold prefix (**)
+    #   - numbered prefix (1., 2., …)
+    # Then the section title, then whitespace and either newline or colon.
     pattern = (
-        r"(?:^|\n)\s*(?:\d+\.\s*)?(" +
-        "|".join(re.escape(t) for t in section_titles) +
-        r")\s*[\n:]"
+        r"(?:^|\n)\s*"
+        r"(?:\*{1,2})?"          # optional ** for bold
+        r"(?:#{1,6}\s+)?"        # optional markdown header
+        r"(?:\d+\.\s*)?"         # optional "1. "
+        r"(?:\*{1,2})?"          # optional ** for bold (in case it's around title)
+        r"(" + "|".join(re.escape(t) for t in section_titles) + r")"
+        r"(?:\*{1,2})?"          # closing **
+        r"\s*[\n:]"
     )
     parts = re.split(pattern, text, flags=re.IGNORECASE)
 
@@ -443,6 +459,8 @@ def extract_sections(text: str) -> dict[str, str]:
     for i in range(1, len(parts) - 1, 2):
         title = parts[i].strip().title()
         body = parts[i + 1].strip() if i + 1 < len(parts) else ""
+        # Strip leading/trailing markdown noise from body
+        body = body.lstrip("*").rstrip("*").strip()
         sections[title] = body
     return sections
 
@@ -657,7 +675,6 @@ OFFICIAL_DOMAINS = [
     "gov.uk",
     "ofsi.hmtreasury.gov.uk",
     "un.org",
-    "sanctionsmap.eu",
 ]
 
 # Anthropic web_search pricing — $10 per 1000 searches (Mar 2026)
